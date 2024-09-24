@@ -1,0 +1,83 @@
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Current SDK version is 0.18.1
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Configure stats pid to 19844
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Loading settings from C:\Users\14360\.config\wandb\settings
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Loading settings from C:\Users\14360\Desktop\ModalGNN_Time_Domain\wandb\settings
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Loading settings from environment variables: {}
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-09-24 14:53:04,826 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program_abspath': 'c:\\users\\14360\\desktop\\modalgnn_time_domain\\train.py', 'program': 'c:\\users\\14360\\desktop\\modalgnn_time_domain\\train.py'}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {'api_key': '***REDACTED***'}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {'api_key': '***REDACTED***'}
+2024-09-24 14:53:04,827 INFO    MainThread:19844 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-09-24 14:53:04,827 ERROR   MainThread:19844 [wandb_setup.py:_flush():79] error in wandb.init()
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\spyder_kernels\customize\spydercustomize.py", line 473, in exec_code
+    exec_fun(compile(ast_code, filename, 'exec'), ns_globals, ns_locals)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\spyder_kernels\py3compat.py", line 356, in compat_exec
+    exec(code, globals, locals)
+  File "c:\users\14360\desktop\modalgnn_time_domain\train.py", line 184, in <module>
+    train('config/config.yaml')
+  File "c:\users\14360\desktop\modalgnn_time_domain\train.py", line 76, in train
+    wandb.init(
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 1255, in init
+    wandb._sentry.reraise(e)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\analytics\sentry.py", line 155, in reraise
+    raise exc.with_traceback(sys.exc_info()[2])
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 1240, in init
+    wi.setup(kwargs)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 303, in setup
+    wandb_login._login(
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_login.py", line 347, in _login
+    wlogin.prompt_api_key()
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_login.py", line 281, in prompt_api_key
+    raise UsageError("api_key not configured (no-tty). call " + directive)
+wandb.errors.UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+2024-09-24 14:53:04,828 ERROR   MainThread:19844 [wandb_setup.py:_flush():79] error in wandb.init()
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\spyder_kernels\customize\spydercustomize.py", line 473, in exec_code
+    exec_fun(compile(ast_code, filename, 'exec'), ns_globals, ns_locals)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\spyder_kernels\py3compat.py", line 356, in compat_exec
+    exec(code, globals, locals)
+  File "c:\users\14360\desktop\modalgnn_time_domain\train.py", line 184, in <module>
+    train('config/config.yaml')
+  File "c:\users\14360\desktop\modalgnn_time_domain\train.py", line 76, in train
+    wandb.init(
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 1255, in init
+    wandb._sentry.reraise(e)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\analytics\sentry.py", line 155, in reraise
+    raise exc.with_traceback(sys.exc_info()[2])
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 1240, in init
+    wi.setup(kwargs)
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_init.py", line 303, in setup
+    wandb_login._login(
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_login.py", line 347, in _login
+    wlogin.prompt_api_key()
+  File "D:\Anaconda3\envs\GNN_env\lib\site-packages\wandb\sdk\wandb_login.py", line 281, in prompt_api_key
+    raise UsageError("api_key not configured (no-tty). call " + directive)
+wandb.errors.UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+2024-09-24 14:53:04,829 INFO    MainThread:19844 [wandb_init.py:_log_setup():532] Logging user logs to C:\Users\14360\Desktop\ModalGNN_Time_Domain\wandb\run-20240924_145304-hz6354xf\logs\debug.log
+2024-09-24 14:53:04,829 INFO    MainThread:19844 [wandb_init.py:_log_setup():533] Logging internal logs to C:\Users\14360\Desktop\ModalGNN_Time_Domain\wandb\run-20240924_145304-hz6354xf\logs\debug-internal.log
+2024-09-24 14:53:04,829 INFO    MainThread:19844 [wandb_init.py:init():616] calling init triggers
+2024-09-24 14:53:04,830 INFO    MainThread:19844 [wandb_init.py:init():623] wandb.init called with sweep_config: {}
+config: {'mode_N': 7, 'time_L': 2000, 'time_0': 2000, 'model_dim': 64, 'fft_n': 1024, 'dropout_rate': 0.2, 'hid_layer': 0, 'batch_size': 32, 'learning_rate': 0.0005, 'step_size': 100, 'gamma': 1, 'train_N': 10, 'model_name': 'SAGE'}
+2024-09-24 14:53:04,830 INFO    MainThread:19844 [wandb_init.py:init():666] starting backend
+2024-09-24 14:53:04,830 INFO    MainThread:19844 [wandb_init.py:init():670] setting up manager
+2024-09-24 14:53:04,835 INFO    MainThread:19844 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=spawn, using: spawn
+2024-09-24 14:53:04,838 INFO    MainThread:19844 [wandb_init.py:init():678] backend started and connected
+2024-09-24 14:53:04,846 INFO    MainThread:19844 [wandb_init.py:init():773] updated telemetry
+2024-09-24 14:53:04,846 INFO    MainThread:19844 [wandb_init.py:init():806] communicating run to backend with 90.0 second timeout
+2024-09-24 14:53:05,199 INFO    MainThread:19844 [wandb_init.py:init():857] starting run threads in backend
+2024-09-24 14:53:05,392 INFO    MainThread:19844 [wandb_run.py:_console_start():2459] atexit reg
+2024-09-24 14:53:05,392 INFO    MainThread:19844 [wandb_run.py:_redirect():2307] redirect: wrap_raw
+2024-09-24 14:53:05,392 INFO    MainThread:19844 [wandb_run.py:_redirect():2372] Wrapping output streams.
+2024-09-24 14:53:05,393 INFO    MainThread:19844 [wandb_run.py:_redirect():2397] Redirects installed.
+2024-09-24 14:53:05,398 INFO    MainThread:19844 [wandb_init.py:init():900] run started, returning control to user process
+2024-09-24 14:56:24,125 INFO    MainThread:19844 [wandb_run.py:_finish():2158] finishing run jxd-engineer/ModalGNN_TimeDomain/hz6354xf
+2024-09-24 14:56:24,125 INFO    MainThread:19844 [wandb_run.py:_atexit_cleanup():2422] got exitcode: 0
+2024-09-24 14:56:24,126 INFO    MainThread:19844 [wandb_run.py:_restore():2404] restore
+2024-09-24 14:56:24,126 INFO    MainThread:19844 [wandb_run.py:_restore():2410] restore done
+2024-09-24 14:56:26,133 INFO    MainThread:19844 [wandb_run.py:_footer_history_summary_info():4037] rendering history
+2024-09-24 14:56:26,134 INFO    MainThread:19844 [wandb_run.py:_footer_history_summary_info():4069] rendering summary
+2024-09-24 14:56:26,150 INFO    MainThread:19844 [wandb_run.py:_footer_sync_info():3996] logging synced files

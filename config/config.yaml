@@ -1,0 +1,21 @@
+shared:
+    mode_N: 7
+    time_L: 2000
+    time_0: 2000
+
+model:
+    name: "SAGE"
+    dim: 64
+    fft_n: 1024
+    dropout_rate: 0.2
+    hid_layer: 0
+    
+data:
+    path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat"
+    bs: 32
+    
+train:
+    learning_rate: 0.0005
+    epochs: 1000
+    step_size: 100
+    gamma: 1

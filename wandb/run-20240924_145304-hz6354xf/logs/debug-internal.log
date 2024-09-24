@@ -1,0 +1,21 @@
+{"time":"2024-09-24T14:53:04.8477453+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-09-24T14:53:04.8477453+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20240924_145304-hz6354xf\\logs\\debug-core.log"}
+{"time":"2024-09-24T14:53:04.8504449+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-09-24T14:53:04.8504449+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20240924_145304-hz6354xf\\logs\\debug-core.log"}
+{"time":"2024-09-24T14:53:04.86249+02:00","level":"INFO","msg":"created new stream","id":"hz6354xf"}
+{"time":"2024-09-24T14:53:04.863009+02:00","level":"INFO","msg":"stream: started","id":"hz6354xf"}
+{"time":"2024-09-24T14:53:04.863009+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:53:04.863009+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:53:04.863009+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:53:05.2096734+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-09-24T14:53:05.2165047+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-09-24T14:56:24.1271568+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-09-24T14:56:24.1271568+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-09-24T14:56:24.50811+02:00","level":"WARN","msg":"No job ingredients found, not creating job artifact"}
+{"time":"2024-09-24T14:56:24.50811+02:00","level":"WARN","msg":"No source type found, not creating job artifact"}
+{"time":"2024-09-24T14:56:24.50811+02:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-09-24T14:56:26.1550959+02:00","level":"INFO","msg":"stream: closing","id":"hz6354xf"}
+{"time":"2024-09-24T14:56:26.1550959+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:56:26.1550959+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:56:26.1550959+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"hz6354xf"}}
+{"time":"2024-09-24T14:56:26.1556266+02:00","level":"INFO","msg":"stream: closed","id":"hz6354xf"}

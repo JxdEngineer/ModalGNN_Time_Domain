@@ -11,7 +11,6 @@ import dgl
 import numpy as np
 import time
 from torch.optim.lr_scheduler import StepLR
-import matplotlib.pyplot as plt
 import wandb
 
 # fix Seed - DGL cannot reproduce results by fixing the seed
@@ -167,7 +166,12 @@ def train(config_path):
         # wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
     # wandb.finish()
     train_time = (time.time() - start_time)
-    print("--- %s seconds ---" % train_time)
+    print("Train the model: done, %s seconds" % train_time)
+    
+    # Save the model's state dictionary
+    model_save_path = config['model']['name'] + '.pth'
+    torch.save(model.state_dict(), model_save_path)
+    print('Save trained model: done')
 
 if __name__ == "__main__":
     train('config/config.yaml')

@@ -17,13 +17,13 @@ class SAGE(nn.Module):
     def forward(self, graph, inputs):
         h = self.conv1(graph, inputs) 
         # h = self.norm(h)
-        # h = self.activation(h)
-        # h = self.dropout(h)
+        h = self.activation(h)
+        h = self.dropout(h)
         for i in range(self.hid_layer):
             h = self.conv2(graph, h)
             # h = self.norm(h)
-            # h = self.activation(h)
-            # h = self.dropout(h)
+            h = self.activation(h)
+            h = self.dropout(h)
         h = self.conv3(graph, h)
         return h
 
@@ -46,11 +46,11 @@ class ChebConv(nn.Module):
         self.hid_layer = hid_layer
     def forward(self, graph, inputs):
         h = self.conv1(graph, inputs) 
-        # h = self.activation(h)
+        h = self.activation(h)
         # h = self.dropout(h)
         for i in range(self.hid_layer):
             h = self.conv2(graph, h)
-            # h = self.activation(h)
+            h = self.activation(h)
             # h = self.dropout(h)
         h = self.conv3(graph, h)
         return h

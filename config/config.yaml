@@ -5,7 +5,7 @@ shared:
 
 model:
     name: "SAGE"
-    dim: 32
+    dim: 64
     fft_n: 1024
     dropout_rate: 0.2
     hid_layer: 0
@@ -16,6 +16,6 @@ data:
     
 train:
     learning_rate: 0.0005
-    epochs: 100
+    epochs: 3000
     step_size: 100
     gamma: 1

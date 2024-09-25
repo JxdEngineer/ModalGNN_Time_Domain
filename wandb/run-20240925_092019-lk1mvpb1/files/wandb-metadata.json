@@ -1,0 +1,28 @@
+{
+  "os": "Windows-10-10.0.22631-SP0",
+  "python": "3.10.14",
+  "startedAt": "2024-09-25T07:20:19.882789Z",
+  "program": "c:\\users\\14360\\desktop\\modalgnn_time_domain\\train.py",
+  "codePath": "train.py",
+  "email": "jxd.engineer@gmail.com",
+  "root": "C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain",
+  "host": "JXD-LAPTOP",
+  "username": "14360",
+  "executable": "D:\\Anaconda3\\envs\\GNN_env\\python.exe",
+  "codePathLocal": "train.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "disk": {
+    "/": {
+      "total": "214749409280",
+      "used": "140840116224"
+    }
+  },
+  "memory": {
+    "total": "14702026752"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 16
+  }
+}

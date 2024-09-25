@@ -1,14 +1,13 @@
-# Basic Python requirements
-python==3.10.*
-
 # PyTorch with CUDA 12.1
-torch==2.1.2+cu121 -f https://download.pytorch.org/whl/torch_stable.html
+pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu121
 
 # DGL (Deep Graph Library) with CUDA 12.1
-dgl-cu121==1.1.0 -f https://data.dgl.ai/wheels/repo.html
+pip install  dgl -f https://data.dgl.ai/wheels/torch-2.1/cu121/repo.html
 
 # Add other dependencies here
-numpy==1.23.5
-scipy==1.11.2
-matplotlib==3.7.2
-pandas==2.1.1
+pip install numpy # included in dgl
+python -m pip install scipy  # included in dgl
+python -m pip install -U matplotlib
+pip install pandas  # included in dgl
+pip install TIME-python
+pip install wandb

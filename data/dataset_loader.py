@@ -32,8 +32,8 @@ class Dataset(DGLDataset):
         # For each graph ID...
         for graph_id in self.graph_ids:
             # Create a graph and add it to the list of graphs and labels.  
-            src = np.concatenate((self.element[graph_id][:,0], self.element[graph_id][:,1]), axis=0)-1 # bi-directional edge, left-end node no. (python starts from 0 so minus 1)
-            dst = np.concatenate((self.element[graph_id][:,1], self.element[graph_id][:,0]), axis=0)-1 # bi-directional edge, right-end node no.
+            src = np.concatenate((self.element[graph_id][:,0], self.element[graph_id][:,1]), axis=0) - 1 # bi-directional edge, left-end node no. (python starts from 0 so minus 1)
+            dst = np.concatenate((self.element[graph_id][:,1], self.element[graph_id][:,0]), axis=0) - 1 # bi-directional edge, right-end node no.
             graph_sub = dgl.graph((src, dst))  #
             # define node features
             graph_sub.ndata['acc_Y'] = torch.tensor(self.acc_input[graph_id][:, self.time_0:(self.time_0+self.time_L)], dtype = torch.float)  # remove the first time_0 data that is affected by the impact force
@@ -43,6 +43,7 @@ class Dataset(DGLDataset):
             node_mask = torch.ones(len(self.node[graph_id]), dtype=torch.bool)
             graph_sub.ndata['mask'] = node_mask
             # define edge features
+            # graph_sub.edata['element'] = torch.tensor(self.element[graph_id], dtype = torch.float) - 1
             edata_L = torch.tensor(self.element_L[graph_id][:, 0], dtype = torch.float)
             graph_sub.edata['L'] = torch.cat((edata_L, edata_L), 0).unsqueeze(1)  # undirectional edge, so double the features
             edata_theta = torch.tensor(self.element_theta[graph_id][:, 0], dtype = torch.float)

@@ -92,6 +92,7 @@ def train(config_path):
             "model_name": config['model']['name']
         }
     )
+    
     # update W&B config
     # api = wandb.Api()
     # run = api.run("jxd-engineer/ModalTemporalGNN/3jvvrp2h")

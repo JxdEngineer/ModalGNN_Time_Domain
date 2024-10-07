@@ -1,0 +1,21 @@
+{"time":"2024-10-01T14:53:33.4773654+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-01T14:53:33.4773654+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241001_145333-fecuxwx7\\logs\\debug-core.log"}
+{"time":"2024-10-01T14:53:33.4779716+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-01T14:53:33.4779716+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241001_145333-fecuxwx7\\logs\\debug-core.log"}
+{"time":"2024-10-01T14:53:33.4849507+02:00","level":"INFO","msg":"created new stream","id":"fecuxwx7"}
+{"time":"2024-10-01T14:53:33.4849507+02:00","level":"INFO","msg":"stream: started","id":"fecuxwx7"}
+{"time":"2024-10-01T14:53:33.4849507+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:53:33.4849507+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:53:33.4849507+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:53:33.7656848+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-01T14:53:33.7662032+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-01T14:59:49.2870877+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-01T14:59:49.2870877+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-01T14:59:49.5975838+02:00","level":"WARN","msg":"No job ingredients found, not creating job artifact"}
+{"time":"2024-10-01T14:59:49.5975838+02:00","level":"WARN","msg":"No source type found, not creating job artifact"}
+{"time":"2024-10-01T14:59:49.5975838+02:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-10-01T14:59:51.2375926+02:00","level":"INFO","msg":"stream: closing","id":"fecuxwx7"}
+{"time":"2024-10-01T14:59:51.2375926+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:59:51.2375926+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:59:51.2375926+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"fecuxwx7"}}
+{"time":"2024-10-01T14:59:51.2381095+02:00","level":"INFO","msg":"stream: closed","id":"fecuxwx7"}

@@ -1,9 +1,13 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import yaml
+
+with open('config/config.yaml', 'r') as f:
+    config = yaml.safe_load(f)
 
 # Read the log file into a pandas DataFrame
-df_loss_train = pd.read_csv("loss_train.txt")
-df_loss_valid = pd.read_csv("loss_valid.txt")
+df_loss_train = pd.read_csv(config['model']['name']+"_loss_train.txt")
+df_loss_valid = pd.read_csv(config['model']['name']+"_loss_valid.txt")
 
 # Remove leading and trailing spaces from column names
 df_loss_train.columns = df_loss_train.columns.str.strip()
@@ -31,6 +35,7 @@ plt.semilogy(loss_valid_meter, label='valid loss: '+f"{loss_valid_meter[-1]:.6f}
 plt.ylabel('MSE loss', fontsize=14)
 plt.xlabel('Epoch', fontsize=14)
 title_text = "Time={:.3f}".format(time_train[-1])
+plt.ylim([0.001, 10])
 plt.title(title_text)
 plt.grid()
 plt.legend()

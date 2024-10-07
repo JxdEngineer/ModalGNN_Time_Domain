@@ -70,7 +70,6 @@ def train(config_path):
                             device=device)
     print('Create validation dataset: done')
     
-    
     # start a new wandb run to track the training process #####################
     wandb.init(
         # set the wandb project where this run will be logged
@@ -109,13 +108,13 @@ def train(config_path):
     c2 = 1
     c3 = 1
     c4 = 0
-    c5 = 0
+    # c5 = 0
     
     # Path to log file
-    log_file_path_train = "loss_train.txt"
+    log_file_path_train = config['model']['name'] + "_loss_train.txt"
     with open(log_file_path_train, 'w') as f:
         f.write("epoch, time, loss1, loss2, loss3, loss4, total_loss\n")  # Header for the log file
-    log_file_path_valid = "loss_valid.txt"
+    log_file_path_valid = config['model']['name'] + "_loss_valid.txt"
     with open(log_file_path_valid, 'w') as f:
         f.write("epoch, time, loss1, loss2, loss3, loss4, total_loss\n")  # Header for the log file
  
@@ -162,10 +161,12 @@ def train(config_path):
 
         if epoch % 20 == 0:
             print('epoch: {}, loss_train: {:.10f}, loss_valid: {:.10f}' 
-                  .format(epoch, epoch_loss_train, epoch_loss_valid))     
+                  .format(epoch, epoch_loss_train, epoch_loss_valid))  
+            
         # log metrics to wandb #########################
         wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
     wandb.finish()
+    
     train_time = (time.time() - start_time)
     print("Train the model: done, %s seconds" % train_time)
     

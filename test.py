@@ -45,7 +45,7 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-test_no = np.array([3]) # number of the tested truss
+test_no = np.array([1-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path=config['data']['path'], 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -53,7 +53,7 @@ dataloader_test = get_dataset(data_path=config['data']['path'],
                         time_L=config['shared']['time_L'], 
                         mode_N=config['shared']['mode_N'],
                         device='cpu')
-print('Create training dataset: done')
+print('Create dataset: done')
 
 plt.close('all')
 count = 0

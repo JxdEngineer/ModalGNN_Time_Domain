@@ -4,7 +4,12 @@ shared:
     time_0: 2000
 
 model:
-    name: "TEST"
+    # name: "GINE"
+    name: "SAGE_CNN1D"
+    # name: "SAGE_CNN2D"
+    # name: "SAGE2MLP1"
+    # name: "GINE_CPSD"
+    # name: "EdgeGAT"
     dim: 64
     fft_n: 1024
     dropout_rate: 0.2

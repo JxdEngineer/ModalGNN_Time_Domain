@@ -28,11 +28,41 @@ class SAGE(nn.Module):
         return h
 
 class GIN(nn.Module):
-    def __init__(self, in_feats, out_feats):
+    def __init__(self, in_feats, out_feats, dropout_rate):
         super().__init__()
         self.conv1 = dglnn.GINConv(nn.Linear(in_feats, out_feats))
+        self.activation = torch.nn.Tanh()
+        self.dropout = nn.Dropout(p=dropout_rate)
     def forward(self, graph, node_inputs):
         h = self.conv1(graph, node_inputs)
+        h = self.activation(h)
+        h = self.dropout(h)
+        return h
+
+class GINE_Linear(nn.Module):
+    def __init__(self, in_feats, out_feats, dropout_rate):
+        super().__init__()
+        # self.conv1 = dglnn.GINEConv(nn.Linear(in_feats, out_feats), learn_eps=True)
+        self.conv1 = dglnn.GINEConv(nn.Linear(in_feats, out_feats))
+        self.activation = torch.nn.Tanh()
+        self.dropout = nn.Dropout(p=dropout_rate)
+    def forward(self, graph, node_inputs, edge_inputs):
+        h = self.conv1(graph, node_inputs, edge_inputs)
+        h = self.activation(h)
+        h = self.dropout(h)
+        return h
+
+class GINE(nn.Module):
+    def __init__(self, dropout_rate):
+        super().__init__()
+        self.conv = dglnn.GINEConv()
+        self.activation = torch.nn.Tanh()
+        self.dropout = nn.Dropout(p=dropout_rate)
+    def forward(self, graph, node_inputs, edge_inputs):
+        h = self.conv(graph, node_inputs, edge_inputs)
+        h = self.activation(h)
+        h = self.dropout(h)
+        h = self.conv(graph, node_inputs, edge_inputs)
         return h
 
 class ChebConv(nn.Module):
@@ -47,12 +77,32 @@ class ChebConv(nn.Module):
     def forward(self, graph, inputs):
         h = self.conv1(graph, inputs) 
         h = self.activation(h)
-        # h = self.dropout(h)
+        h = self.dropout(h)
         for i in range(self.hid_layer):
             h = self.conv2(graph, h)
             h = self.activation(h)
-            # h = self.dropout(h)
+            h = self.dropout(h)
         h = self.conv3(graph, h)
+        return h
+
+class EdgeGAT(nn.Module):
+    def __init__(self, node_feats, hid_feats, out_feats, edge_feats, dropout_rate, hid_layer):
+        super().__init__()
+        self.conv1 = dglnn.EdgeGATConv(node_feats, edge_feats, hid_feats, num_heads=1)
+        self.conv2 = dglnn.EdgeGATConv(hid_feats, edge_feats, hid_feats, num_heads=1)
+        self.conv3 = dglnn.EdgeGATConv(hid_feats, edge_feats, out_feats, num_heads=1)
+        self.activation = torch.nn.Tanh()
+        self.dropout = nn.Dropout(p=dropout_rate)
+        self.hid_layer = hid_layer
+    def forward(self, graph, node_in, edge_in):
+        h = self.conv1(graph, node_in, edge_in).squeeze()
+        h = self.activation(h)
+        h = self.dropout(h)
+        for i in range(self.hid_layer):
+            h = self.conv2(graph, h, edge_in).squeeze()
+            h = self.activation(h)
+            h = self.dropout(h)
+        h = self.conv3(graph, h, edge_in).squeeze()
         return h
 
 # Define a MLP
@@ -77,9 +127,38 @@ class MLP(nn.Module):
         return y
 
 # Define a CNN
-class EncoderCNN(nn.Module):
+class CNN1D(nn.Module):
     def __init__(self):
-        super(EncoderCNN, self).__init__()
+        super().__init__()
+        # First 1D convolutional layer: input 2 channels (magnitude + phase) -> 32 filters
+        self.conv1 = nn.Conv1d(in_channels=2, out_channels=32, kernel_size=5, stride=1, padding=2)
+        # Second 1D convolutional layer: 32 filters -> 64 filters
+        self.conv2 = nn.Conv1d(in_channels=32, out_channels=64, kernel_size=5, stride=1, padding=2) 
+        # Pooling layer to reduce dimensionality along the frequency axis
+        self.pool = nn.MaxPool1d(kernel_size=2, stride=2) 
+        # Third 1D convolutional layer: 64 filters -> 128 filters
+        self.conv3 = nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1) 
+        # Fully connected layer to transform to N*64 features
+        self.fc = nn.Linear(128*64, 64)  # Adjust 128*128 based on pooling/convolution output size
+        self.activation = torch.nn.Tanh()
+        self.dropout = nn.Dropout(p=0.2)
+    def forward(self, x):
+        x = x.permute(0, 2, 1)
+        # Apply conv1 -> activation -> pooling
+        x = self.pool(self.dropout(self.activation(self.conv1(x))))  # Shape: [N, 32, 256]
+        # Apply conv2 -> activation -> pooling
+        x = self.pool(self.dropout(self.activation(self.conv2(x))))  # Shape: [N, 64, 128]
+        # Apply conv3 -> activation -> pooling
+        x = self.pool(self.dropout(self.activation(self.conv3(x))))  # Shape: [N, 128, 64]
+        # Flatten the output for the fully connected layer
+        x = x.view(x.size(0), -1)  # Flatten to [N, 128*64]
+        # Fully connected layer to produce N*64 output
+        x = self.fc(x)  # Shape: [N, 64]
+        return x
+
+class CNN2D(nn.Module):
+    def __init__(self):
+        super().__init__()
         # First Conv Layer: Reduce the 513 length to a smaller size
         # First Conv Layer: Input is (N, 1, 513, 2)
         self.conv1 = nn.Conv2d(in_channels=1, out_channels=16, kernel_size=(5, 2), stride=(2, 1), padding=(2, 0))
@@ -94,7 +173,7 @@ class EncoderCNN(nn.Module):
         self.fc = nn.Linear(128, 1) 
     def forward(self, x0):
         # Reshape input to (N, 1, 513, 2)
-        x = x0.view(x0.size(0), 1, 513, 2)  
+        x = x0.view(x0.size(0), 1, 513, 2)
         x = self.conv1(x)  # (N, 16, 257, 1)
         x = self.dropout(self.activation(x))
         x = self.conv2(x)  # (N, 32, 129, 1)
@@ -142,7 +221,7 @@ class Model_SAGE(nn.Module):   # GraphSAGE
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
-# class Model_TEST(nn.Module):   # GraphSAGE, use two GNNs and MLPs
+# class Model_2SAGE_2MLP(nn.Module):   # GraphSAGE, use two GNNs and MLPs
 #     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
 #         super().__init__()
 #         # use built-in Transformer ##################################
@@ -177,38 +256,40 @@ class Model_SAGE(nn.Module):   # GraphSAGE
 #         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
 #         return q, phi # return mode responses and mode shapes
 
-# class Model_TEST(nn.Module):   # GraphSAGE, use FFT real and imag as input
-#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
-#         super().__init__()
-#         # use built-in Transformer ##################################
-#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
-#                                                     d_head=4, d_ff=256,
-#                                                     n_layers=2)
-#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
-#                                                     d_head=4, d_ff=256,
-#                                                     n_layers=2,
-#                                                     k=mode_N)       
-#         self.GNN = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
-#         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
-#         self.time_L = time_L
-#         self.fft_n = fft_n
-#     def forward(self, g):
-#         node_in = g.ndata['acc_Y']
-#         # graph-level operation ##################################
-#         graph_spatial = self.pooling1(g, node_in)
-#         graph_spatial = self.pooling2(g, graph_spatial)
-#         [B, LK] = graph_spatial.size()
-#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
-#         # node-level operation ##################################
-#         node_in_fft_real = torch.fft.rfft(node_in, n=self.fft_n).real
-#         node_in_fft_imag = torch.fft.rfft(node_in, n=self.fft_n).imag
-#         node_in_fft = torch.cat([node_in_fft_real, node_in_fft_imag], dim=1)
-#         node_spatial = self.GNN(g, node_in_fft)
-#         phi = self.node_decoder(node_spatial)
-#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
-#         return q, phi # return mode responses and mode shapes
+class Model_2SAGE_1MLP(nn.Module):   # GraphSAGE, use two GNNs and ONE MLP
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)       
+        self.GNN1 = SAGE(round(fft_n/2)+1, dim, dim, dropout_rate, hid_layer)
+        self.GNN2 = SAGE(round(fft_n/2)+1, dim, dim, dropout_rate, hid_layer)
+        self.node_decoder = MLP(dim*2, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
+        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle()
+        node_spatial1 = self.GNN1(g, node_in_fft_abs)
+        node_spatial2 = self.GNN2(g, node_in_fft_angle)
+        node_spatial = torch.cat([node_spatial1, node_spatial2], dim=-1)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
 
-class Model_TEST(nn.Module):   # GraphSAGE, use CNN to encode the FFT
+class Model_CNN1D(nn.Module):   # GraphSAGE, use CNN to encode the FFT
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
         super().__init__()
         # use built-in Transformer ##################################
@@ -220,7 +301,40 @@ class Model_TEST(nn.Module):   # GraphSAGE, use CNN to encode the FFT
                                                     n_layers=2,
                                                     k=mode_N)       
         self.GNN = SAGE(dim, dim, dim, dropout_rate, hid_layer)
-        self.node_encoder = EncoderCNN()
+        self.node_encoder = CNN1D()
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
+        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle()
+        node_in_fft = torch.stack([node_in_fft_abs, node_in_fft_angle], dim=2)
+        node_in_hid = self.node_encoder(node_in_fft)
+        node_spatial = self.GNN(g, node_in_hid)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
+
+class Model_CNN2D(nn.Module):   # GraphSAGE, use CNN to encode the FFT
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)       
+        self.GNN = SAGE(dim, dim, dim, dropout_rate, hid_layer)
+        self.node_encoder = CNN2D()
         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
         self.time_L = time_L
         self.fft_n = fft_n
@@ -272,12 +386,158 @@ class Model_GIN(nn.Module):   # GIN
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
+class Model_GINE(nn.Module):   # GINE
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)       
+        self.GNN = GINE(fft_n+2, dim)
+        self.edge_encoder = MLP(2, dim, fft_n+2, dropout_rate, hid_layer)
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        edge_in = torch.cat([g.edata['L'], g.edata['theta']], dim=1)
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n ).abs()
+        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n ).angle()
+        node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)
+        edge_in_encoded = self.edge_encoder(edge_in)
+        node_spatial = self.GNN(g, node_in_fft, edge_in_encoded)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
+
+# class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as node features
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)       
+#         # self.GNN = GINE_Linear(round(fft_n/2)+1, dim, dropout_rate)
+#         self.GNN = GINE(dropout_rate)
+#         self.node_decoder = MLP(round(fft_n/2)+1, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#         self.norm = nn.BatchNorm1d(round(fft_n/2)+1)
+#     def forward(self, g):
+#         node_in_time = g.ndata['acc_Y']
+#         node_in_PSD = g.ndata['acc_Y_PSD']
+#         edge_in = g.edata['cpsd_angle'] / 3.14
+#         # edge_in = torch.sign(g.edata['cpsd_real'])
+        
+#         # node_in_PSD = self.norm(node_in_PSD)
+#         # edge_in = self.norm(edge_in)
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_in_time)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         node_spatial = self.GNN(g, node_in_PSD, edge_in)
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as node features
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)       
+        # self.GNN = GINE_Linear(round(fft_n/2)+1, dim, dropout_rate)
+        self.GNN = GINE(dropout_rate)
+        self.edge_encoder = MLP(round(fft_n/2)+1, dim, fft_n+2, dropout_rate, hid_layer)
+        self.node_decoder = MLP(fft_n+2, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        # edge_in = g.edata['cpsd_angle'] / 3.14
+        edge_in = torch.sign(g.edata['cpsd_real'])
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n ).abs()
+        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n ).angle()
+        node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)
+        edge_in_encoded = self.edge_encoder(edge_in)
+        node_spatial = self.GNN(g, node_in_fft, edge_in_encoded)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
+
+class Model_EdgeGAT(nn.Module):   # GAT, using CPSD as edge features, PSD as node features
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)       
+        self.GNN = EdgeGAT(round(fft_n/2)+1, dim, dim, round(fft_n/2)+1, dropout_rate, hid_layer)
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in_time = g.ndata['acc_Y']
+        node_in_PSD = g.ndata['acc_Y_PSD']
+        edge_in = g.edata['cpsd_angle']
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in_time)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_spatial = self.GNN(g, node_in_PSD, edge_in)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
+
 def create_model(model_name, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
     if model_name == 'SAGE':
         return Model_SAGE(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'SAGE2MLP1':
+        return Model_2SAGE_1MLP(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     elif model_name == 'GIN':
         return Model_GIN(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
-    elif model_name == 'TEST':
-        return Model_TEST(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'GINE':
+        return Model_GINE(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'GINE_CPSD':
+        return Model_GINE_CPSD(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'SAGE_CNN2D':
+        return Model_CNN2D(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'SAGE_CNN1D':
+        return Model_CNN1D(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'EdgeGAT':
+        return Model_EdgeGAT(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     else:
         raise ValueError(f"Model {model_name} not recognized.")

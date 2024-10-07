@@ -4,8 +4,9 @@ shared:
     time_0: 2000
 
 model:
+    name: "SAGE"
     # name: "GINE"
-    name: "SAGE_CNN1D"
+    # name: "SAGE_CNN1D"
     # name: "SAGE_CNN2D"
     # name: "SAGE2MLP1"
     # name: "GINE_CPSD"

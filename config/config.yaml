@@ -20,12 +20,12 @@ model:
     hid_layer: 0
     
 data:
-    path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local
-    # path: "/cluster/work/ibk_chatzi/Xudong//trapezoid_time_bottom_input_100sample_lowpass.mat" # ETH Euler
+    # path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local
+    path: "/cluster/work/ibk_chatzi/Xudong//trapezoid_time_bottom_input_100sample_lowpass.mat" # ETH Euler
     bs: 32
     
 train:
     learning_rate: 0.0005
-    epochs: 5000
+    epochs: 50000
     step_size: 100
     gamma: 1

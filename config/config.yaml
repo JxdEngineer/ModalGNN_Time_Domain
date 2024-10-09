@@ -9,16 +9,19 @@ model:
     # name: "SAGE_CNN1D"
     # name: "SAGE_CNN2D"
     # name: "SAGE2MLP1"
+    # name: "SAGE2MLP2"
     # name: "GINE_CPSD"
     # name: "EdgeGAT"
+    # name: "CFC"
+    # name: "GatedGraphConv"
     dim: 64
     fft_n: 1024
     dropout_rate: 0.2
     hid_layer: 0
     
 data:
-    # path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local
-    path: "/cluster/work/ibk_chatzi/Xudong//trapezoid_time_bottom_input_100sample_lowpass.mat" # ETH Euler
+    path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local
+    # path: "/cluster/work/ibk_chatzi/Xudong//trapezoid_time_bottom_input_100sample_lowpass.mat" # ETH Euler
     bs: 32
     
 train:

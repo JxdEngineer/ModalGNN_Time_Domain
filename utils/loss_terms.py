@@ -34,5 +34,9 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
     loss1 = loss_func(acc_pred, acc_true)
     loss2 = loss_func(q_corr, batched_eye)
     loss3 = loss_func(q_fft_corr, batched_eye)
-    loss4 = loss_func(phi_pred, graph[0].ndata['phi_Y'])
+    # loss4 = loss_func(phi_pred, graph[0].ndata['phi_Y'])
+    
+    acc_pred_phase = torch.fft.rfft(acc_pred, n=fft_n).angle()
+    acc_true_phase = torch.fft.rfft(acc_true, n=fft_n).angle()
+    loss4 = loss_func(acc_pred_phase, acc_true_phase)
     return loss1, loss2, loss3, loss4

@@ -50,7 +50,7 @@ def train(config_path):
     model.to(device)
     print('Create model: done')
     
-    train_no = np.array(range(0, 90))
+    train_no = np.array(range(0, 10))
     # train_no = np.concatenate((np.array(range(0, 40)), np.array(range(50, 100))))
     valid_no = np.array(range(95, 100))
     dataloader_train = get_dataset(data_path=config['data']['path'], 
@@ -105,8 +105,8 @@ def train(config_path):
         
     # coefficients of different loss terms
     c1 = 1
-    c2 = 1
-    c3 = 1
+    c2 = 30
+    c3 = 30
     c4 = 0
     # c5 = 0
     
@@ -146,6 +146,7 @@ def train(config_path):
             loss1_train, loss2_train, loss3_train, loss4_train = \
                 loss_terms(q_pred_train, phi_pred_train, graph_train,
                            fft_n=config['model']['fft_n'])
+      
             loss_train = loss1_train*c1 + loss2_train*c2 + loss3_train*c3 + loss4_train*c4
             epoch_loss_train += loss_train
         epoch_loss_train /= len(dataloader_train)
@@ -164,7 +165,12 @@ def train(config_path):
                   .format(epoch, epoch_loss_train, epoch_loss_valid))  
             
         # log metrics to wandb #########################
-        wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
+        # wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
+        wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
+                   "loss_valid": loss1_valid + loss2_valid + loss3_valid,
+                   "loss1_valid": loss1_valid,
+                   "loss2_valid": loss2_valid,
+                   "loss3_valid": loss3_valid})    
     wandb.finish()
     
     train_time = (time.time() - start_time)

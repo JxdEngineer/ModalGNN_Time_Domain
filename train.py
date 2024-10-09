@@ -105,8 +105,8 @@ def train(config_path):
         
     # coefficients of different loss terms
     c1 = 1
-    c2 = 30
-    c3 = 30
+    c2 = 1
+    c3 = 1
     c4 = 0
     # c5 = 0
     
@@ -166,11 +166,12 @@ def train(config_path):
             
         # log metrics to wandb #########################
         # wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
+        
         wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
-                   "loss_valid": loss1_valid + loss2_valid + loss3_valid,
-                   "loss1_valid": loss1_valid,
-                   "loss2_valid": loss2_valid,
-                   "loss3_valid": loss3_valid})    
+                    "loss_valid": loss1_valid + loss2_valid + loss3_valid,
+                    "loss1_valid": loss1_valid,
+                    "loss2_valid": loss2_valid,
+                    "loss3_valid": loss3_valid})    
     wandb.finish()
     
     train_time = (time.time() - start_time)

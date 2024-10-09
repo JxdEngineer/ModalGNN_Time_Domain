@@ -181,33 +181,47 @@ class MLP(nn.Module):
         return y
 
 # Define a CNN
+# class CNN1D(nn.Module):
+#     def __init__(self):
+#         super().__init__()
+#         # First 1D convolutional layer: input 2 channels (magnitude + phase) -> 32 filters
+#         self.conv1 = nn.Conv1d(in_channels=2, out_channels=32, kernel_size=5, stride=1, padding=2)
+#         # Second 1D convolutional layer: 32 filters -> 64 filters
+#         self.conv2 = nn.Conv1d(in_channels=32, out_channels=64, kernel_size=5, stride=1, padding=2) 
+#         # Pooling layer to reduce dimensionality along the frequency axis
+#         self.pool = nn.MaxPool1d(kernel_size=2, stride=2) 
+#         # Third 1D convolutional layer: 64 filters -> 128 filters
+#         self.conv3 = nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1) 
+#         # Fully connected layer to transform to N*64 features
+#         self.fc = nn.Linear(128*64, 64)  # Adjust 128*128 based on pooling/convolution output size
+#         self.activation = torch.nn.Tanh()
+#         self.dropout = nn.Dropout(p=0.2)
+#     def forward(self, x):
+#         x = x.permute(0, 2, 1)
+#         # Apply conv1 -> activation -> pooling
+#         x = self.pool(self.dropout(self.activation(self.conv1(x))))  # Shape: [N, 32, 256]
+#         # Apply conv2 -> activation -> pooling
+#         x = self.pool(self.dropout(self.activation(self.conv2(x))))  # Shape: [N, 64, 128]
+#         # Apply conv3 -> activation -> pooling
+#         x = self.pool(self.dropout(self.activation(self.conv3(x))))  # Shape: [N, 128, 64]
+#         # Flatten the output for the fully connected layer
+#         x = x.view(x.size(0), -1)  # Flatten to [N, 128*64]
+#         # Fully connected layer to produce N*64 output
+#         x = self.fc(x)  # Shape: [N, 64]
+#         return x
+
 class CNN1D(nn.Module):
     def __init__(self):
         super().__init__()
-        # First 1D convolutional layer: input 2 channels (magnitude + phase) -> 32 filters
-        self.conv1 = nn.Conv1d(in_channels=2, out_channels=32, kernel_size=5, stride=1, padding=2)
-        # Second 1D convolutional layer: 32 filters -> 64 filters
-        self.conv2 = nn.Conv1d(in_channels=32, out_channels=64, kernel_size=5, stride=1, padding=2) 
-        # Pooling layer to reduce dimensionality along the frequency axis
-        self.pool = nn.MaxPool1d(kernel_size=2, stride=2) 
-        # Third 1D convolutional layer: 64 filters -> 128 filters
-        self.conv3 = nn.Conv1d(in_channels=64, out_channels=128, kernel_size=3, stride=1, padding=1) 
-        # Fully connected layer to transform to N*64 features
-        self.fc = nn.Linear(128*64, 64)  # Adjust 128*128 based on pooling/convolution output size
+        # self.conv1d = nn.Conv1d(in_channels=2, out_channels=1, kernel_size=8, stride=8)
+        self.conv1d = nn.Conv1d(in_channels=2, out_channels=1, kernel_size=9, stride=8, padding=1)
         self.activation = torch.nn.Tanh()
         self.dropout = nn.Dropout(p=0.2)
     def forward(self, x):
-        x = x.permute(0, 2, 1)
-        # Apply conv1 -> activation -> pooling
-        x = self.pool(self.dropout(self.activation(self.conv1(x))))  # Shape: [N, 32, 256]
-        # Apply conv2 -> activation -> pooling
-        x = self.pool(self.dropout(self.activation(self.conv2(x))))  # Shape: [N, 64, 128]
-        # Apply conv3 -> activation -> pooling
-        x = self.pool(self.dropout(self.activation(self.conv3(x))))  # Shape: [N, 128, 64]
-        # Flatten the output for the fully connected layer
-        x = x.view(x.size(0), -1)  # Flatten to [N, 128*64]
-        # Fully connected layer to produce N*64 output
-        x = self.fc(x)  # Shape: [N, 64]
+        # Input: N*2*513 -> Output: N*1*64
+        x = self.conv1d(x)
+        # N*1*64 -> N*64
+        x = x.squeeze()
         return x
 
 class CNN2D(nn.Module):
@@ -406,7 +420,7 @@ class Model_CNN1D(nn.Module):   # GraphSAGE, use CNN to encode the FFT
         # node-level operation ##################################
         node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
         node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle()
-        node_in_fft = torch.stack([node_in_fft_abs, node_in_fft_angle], dim=2)
+        node_in_fft = torch.stack([node_in_fft_abs, node_in_fft_angle], dim=1)
         node_in_hid = self.node_encoder(node_in_fft)
         node_spatial = self.GNN(g, node_in_hid)
         phi = self.node_decoder(node_spatial)

@@ -1,0 +1,18 @@
+{"time":"2024-10-22T22:18:03.217886284+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-22T22:18:03.217907354+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241022_221803-hluhirem/logs/debug-core.log"}
+{"time":"2024-10-22T22:18:03.218406872+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-22T22:18:03.218415562+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241022_221803-hluhirem/logs/debug-core.log"}
+{"time":"2024-10-22T22:18:03.221929441+02:00","level":"INFO","msg":"created new stream","id":"hluhirem"}
+{"time":"2024-10-22T22:18:03.221958581+02:00","level":"INFO","msg":"stream: started","id":"hluhirem"}
+{"time":"2024-10-22T22:18:03.221966561+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:18:03.221990961+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:18:03.221999971+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:18:04.011893195+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-22T22:18:04.014786356+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-22T22:23:34.946780358+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-22T22:23:34.947714525+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-22T22:23:39.825880397+02:00","level":"INFO","msg":"stream: closing","id":"hluhirem"}
+{"time":"2024-10-22T22:23:39.825898646+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:23:39.825913066+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:23:39.825928406+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"hluhirem"}}
+{"time":"2024-10-22T22:23:39.826364085+02:00","level":"INFO","msg":"stream: closed","id":"hluhirem"}

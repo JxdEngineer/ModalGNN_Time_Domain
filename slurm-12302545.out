@@ -1,0 +1,5 @@
+/cluster/home/xudjian/GNN/lib/python3.10/site-packages/torch/nn/modules/rnn.py:82: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn("dropout option adds dropout after all but last "
+/cluster/home/xudjian/ModalGNN_Time_Domain/data/dataset_loader.py:115: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:261.)
+  self.freqs = torch.tensor(self.freqs, dtype = torch.float).to(self.device)
+slurmstepd: error: *** JOB 12302545 ON eu-g6-038 CANCELLED AT 2024-10-22T21:47:12 ***

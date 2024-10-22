@@ -45,7 +45,7 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-test_no = np.array([97-1]) # number of the tested truss
+test_no = np.array([6-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path=config['data']['path'], 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -122,7 +122,7 @@ for graph_test in dataloader_test:
         ax[mode_no, 1].set_ylabel('PSD')
         ax[mode_no, 1].grid(True)
         ax[mode_no, 1].set_xlim(0, 50)
-        for i in range(5):
+        for i in range(7):
             ax[mode_no, 1].plot([freq_test[i], freq_test[i]], [0, max(psd)], color='#FF1F5B')    
         
         phi_pred = phi_pred_test[:, mode_no].to('cpu').detach().numpy().squeeze()

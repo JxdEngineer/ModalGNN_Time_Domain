@@ -15,7 +15,7 @@ with open('config/config.yaml', 'r') as f:
 # prepare data 
 class Dataset(DGLDataset):
     def __init__(self, graph_ids, time_0, time_L, mode_N, device,
-                 acc_input, phi, node, # node features
+                 acc_input, phi, node, fft_abs, fft_angle, # node features
                  element, element_L, element_theta, # edge features
                  freq, zeta): # graph features
         self.graph_ids = graph_ids # these definition of ids must be put above the super(), otherwise error happens
@@ -24,6 +24,8 @@ class Dataset(DGLDataset):
         self.mode_N = mode_N
         self.device = device
         self.acc_input = acc_input
+        self.fft_abs = fft_abs
+        self.fft_angle = fft_angle
         self.phi = phi
         self.node = node
         self.element = element
@@ -52,51 +54,54 @@ class Dataset(DGLDataset):
             node_mask = torch.ones(len(self.node[graph_id]), dtype=torch.bool)
             graph_sub.ndata['mask'] = node_mask
             # define acc_Y_PSD
-            psd_features = []
-            for node in graph_sub.nodes():
-                _, psd = signal.welch(acc_Y[node, :], fs=200, nperseg=256, 
-                                      nfft=config['model']['fft_n'])
-                psd_features.append(psd)
-            psd_tensor = torch.tensor(psd_features, dtype=torch.float)
-            graph_sub.ndata['acc_Y_PSD'] = psd_tensor
+            # psd_features = []
+            # for node in graph_sub.nodes():
+            #     _, psd = signal.welch(acc_Y[node, :], fs=200, nperseg=256, 
+            #                           nfft=config['model']['fft_n'])
+            #     psd_features.append(psd)
+            # psd_tensor = torch.tensor(psd_features, dtype=torch.float)
+            # graph_sub.ndata['acc_Y_PSD'] = psd_tensor
             # fig, ax = plt.subplots(2, 1, layout="constrained")
             # ax[0].plot(graph_sub.ndata['acc_Y_PSD'][14,:])
             # ax[1].plot(graph_sub.ndata['acc_Y_PSD'][54,:])
+            graph_sub.ndata['acc_Y_FFT_abs'] = torch.tensor(self.fft_abs[graph_id], dtype = torch.float)
+            graph_sub.ndata['acc_Y_FFT_angle'] = torch.tensor(self.fft_angle[graph_id], dtype = torch.float)
+            
             # define edge features ##########################################
             # graph_sub.edata['element'] = torch.tensor(self.element[graph_id], dtype = torch.float) - 1
-            edata_L = torch.tensor(self.element_L[graph_id][:, 0], dtype = torch.float)
-            graph_sub.edata['L'] = torch.cat((edata_L, edata_L), 0).unsqueeze(1)  # undirectional edge, so double the features
-            edata_theta = torch.tensor(self.element_theta[graph_id][:, 0], dtype = torch.float)
-            graph_sub.edata['theta'] = torch.cat((edata_theta, edata_theta), 0).unsqueeze(1)  # undirectional edge, so double the features   
-            # calculate CPSD between adjacent node acc and store them as edge features
-            edge_features1 = [] # Initialize an empty list to store edge features (CPSD values)
-            edge_features2 = [] # Initialize an empty list to store edge features (CPSD values)
-            edge_features3 = [] # Initialize an empty list to store edge features (CPSD values)
-            for u, v in zip(src, dst): # Iterate over each edge to calculate the CPSD
-                # Get time series data for the source and destination nodes
-                time_series_u = acc_Y[u]
-                time_series_v = acc_Y[v]
-                # Calculate the CPSD between the time series of the two nodes
-                _, cpsd = signal.csd(time_series_u, time_series_v, 
-                                     nfft=config['model']['fft_n'], fs=200)
-                # Extract real and imaginary parts of CPSD
-                edge_feature1 = np.abs(cpsd)
-                edge_feature2 = np.angle(cpsd)
-                edge_feature3 = np.real(cpsd)
-                # Add the edge feature to the list
-                edge_features1.append(edge_feature1)   
-                edge_features2.append(edge_feature2) 
-                edge_features3.append(edge_feature3) 
-            # Convert edge features to a torch tensor and assign them to the graph
-            edge_features1_tensor = torch.tensor(edge_features1, dtype=torch.float)
-            edge_features2_tensor = torch.tensor(edge_features2, dtype=torch.float)
-            edge_features3_tensor = torch.tensor(edge_features3, dtype=torch.float)
-            # fig, ax = plt.subplots(2, 1, layout="constrained")
-            # ax[0].plot(edge_features1_tensor[7,:])
-            # ax[1].plot(edge_features2_tensor[7,:])
-            graph_sub.edata['cpsd_abs'] = edge_features1_tensor
-            graph_sub.edata['cpsd_angle'] = edge_features2_tensor
-            graph_sub.edata['cpsd_real'] = edge_features3_tensor
+            # edata_L = torch.tensor(self.element_L[graph_id][:, 0], dtype = torch.float)
+            # graph_sub.edata['L'] = torch.cat((edata_L, edata_L), 0).unsqueeze(1)  # undirectional edge, so double the features
+            # edata_theta = torch.tensor(self.element_theta[graph_id][:, 0], dtype = torch.float)
+            # graph_sub.edata['theta'] = torch.cat((edata_theta, edata_theta), 0).unsqueeze(1)  # undirectional edge, so double the features   
+            # # calculate CPSD between adjacent node acc and store them as edge features
+            # edge_features1 = [] # Initialize an empty list to store edge features (CPSD values)
+            # edge_features2 = [] # Initialize an empty list to store edge features (CPSD values)
+            # edge_features3 = [] # Initialize an empty list to store edge features (CPSD values)
+            # for u, v in zip(src, dst): # Iterate over each edge to calculate the CPSD
+            #     # Get time series data for the source and destination nodes
+            #     time_series_u = acc_Y[u]
+            #     time_series_v = acc_Y[v]
+            #     # Calculate the CPSD between the time series of the two nodes
+            #     _, cpsd = signal.csd(time_series_u, time_series_v, 
+            #                          nfft=config['model']['fft_n'], fs=200)
+            #     # Extract real and imaginary parts of CPSD
+            #     edge_feature1 = np.abs(cpsd)
+            #     edge_feature2 = np.angle(cpsd)
+            #     edge_feature3 = np.real(cpsd)
+            #     # Add the edge feature to the list
+            #     edge_features1.append(edge_feature1)   
+            #     edge_features2.append(edge_feature2) 
+            #     edge_features3.append(edge_feature3) 
+            # # Convert edge features to a torch tensor and assign them to the graph
+            # edge_features1_tensor = torch.tensor(edge_features1, dtype=torch.float)
+            # edge_features2_tensor = torch.tensor(edge_features2, dtype=torch.float)
+            # edge_features3_tensor = torch.tensor(edge_features3, dtype=torch.float)
+            # # fig, ax = plt.subplots(2, 1, layout="constrained")
+            # # ax[0].plot(edge_features1_tensor[7,:])
+            # # ax[1].plot(edge_features2_tensor[7,:])
+            # graph_sub.edata['cpsd_abs'] = edge_features1_tensor
+            # graph_sub.edata['cpsd_angle'] = edge_features2_tensor
+            # graph_sub.edata['cpsd_real'] = edge_features3_tensor
             
             graph_sub = graph_sub.to(self.device)
             # define graph features ##########################################
@@ -121,13 +126,15 @@ def get_dataset(data_path, bs, graph_no, time_0, time_L, mode_N, device):
     freq = mat_contents['frequency_out'][:, 0]
     phi = mat_contents['modeshape_out'][:, 0]   # true mode shape
     # phi = abs(mat_contents['modeshape_out'][:, 0])*1  # absolute mode shape
+    fft_abs = mat_contents['acceleration_fft_abs_out'][:, 0]
+    fft_angle = mat_contents['acceleration_fft_angle_out'][:, 0]
     zeta = mat_contents['damping_out'][:, 0]
     node = mat_contents['node_out'][:, 0]
     element = mat_contents['element_out'][:, 0]
     element_L = mat_contents['element_L_out'][:, 0]
     element_theta = mat_contents['element_theta_out'][:, 0]
     dataset = Dataset(graph_no, time_0, time_L, mode_N, device, 
-                 acc_input, phi, node, # node features
+                 acc_input, phi, node, fft_abs, fft_angle, # node features
                  element, element_L, element_theta, # edge features
                  freq, zeta)  # graph features
     dataloader_dataset = dgl.dataloading.GraphDataLoader(dataset, batch_size=bs,

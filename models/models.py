@@ -1,6 +1,7 @@
 # pytorch lib
 import torch
 import torch.nn as nn
+import dgl
 import dgl.nn as dglnn
 
 # Define GNNs
@@ -60,19 +61,6 @@ class GIN(nn.Module):
         self.dropout = nn.Dropout(p=dropout_rate)
     def forward(self, graph, node_inputs):
         h = self.conv1(graph, node_inputs)
-        h = self.activation(h)
-        h = self.dropout(h)
-        return h
-
-class GINE_Linear(nn.Module):
-    def __init__(self, in_feats, out_feats, dropout_rate):
-        super().__init__()
-        # self.conv1 = dglnn.GINEConv(nn.Linear(in_feats, out_feats), learn_eps=True)
-        self.conv1 = dglnn.GINEConv(nn.Linear(in_feats, out_feats))
-        self.activation = torch.nn.Tanh()
-        self.dropout = nn.Dropout(p=dropout_rate)
-    def forward(self, graph, node_inputs, edge_inputs):
-        h = self.conv1(graph, node_inputs, edge_inputs)
         h = self.activation(h)
         h = self.dropout(h)
         return h
@@ -158,7 +146,6 @@ class CFC(nn.Module):
         h = self.activation(h)
         return h
 
-
 # Define a MLP
 class MLP(nn.Module):
     def __init__(self, in_dim, hid_dim, out_dim, dropout_rate, hid_layer):
@@ -180,6 +167,30 @@ class MLP(nn.Module):
         y = self.layer3(y)
         return y
 
+# Define a Transformer
+class TransformerTimeSeries(nn.Module):
+    def __init__(self, d_model=64, nhead=4, num_layers=4, seq_length=2000):
+        super().__init__()
+        # Linear layer to embed N-D time series to d_model dimensions
+        self.embedding = nn.Linear(3, d_model) 
+        # Positional encoding to give the transformer a sense of order
+        self.positional_encoding = nn.Parameter(torch.zeros(3, seq_length, d_model))
+        # Transformer encoder
+        encoder_layer = nn.TransformerEncoderLayer(d_model=d_model, nhead=nhead)
+        self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
+        # Final linear layer to convert d_model output to 7 dimensions
+        self.fc = nn.Linear(d_model, 7)
+    def forward(self, x):
+        # x is of shape (batch_size, seq_length, 1)
+        # Embed the 1D time series into a higher-dimensional space
+        x1 = self.embedding(x)  # (batch_size, seq_length, d_model)
+        # Add positional encoding
+        # x1 = x1 + nn.Parameter(torch.zeros(x1.size()))
+        # Pass through the transformer encoder
+        x1 = self.transformer(x1)  # (batch_size, seq_length, d_model)
+        # Project the transformer output to 7 dimensions
+        x1 = self.fc(x1)  # (batch_size, seq_length, 7)
+        return x1
 # Define a CNN
 # class CNN1D(nn.Module):
 #     def __init__(self):
@@ -214,15 +225,19 @@ class CNN1D(nn.Module):
     def __init__(self):
         super().__init__()
         # self.conv1d = nn.Conv1d(in_channels=2, out_channels=1, kernel_size=8, stride=8)
-        self.conv1d = nn.Conv1d(in_channels=2, out_channels=1, kernel_size=9, stride=8, padding=1)
+        self.conv1 = nn.Conv1d(in_channels=2, out_channels=1, kernel_size=9, stride=8, padding=1)
+        # self.conv2 = nn.Conv1d(in_channels=16, out_channels=1, kernel_size=9, stride=1, padding=4)
         self.activation = torch.nn.Tanh()
         self.dropout = nn.Dropout(p=0.2)
     def forward(self, x):
         # Input: N*2*513 -> Output: N*1*64
-        x = self.conv1d(x)
+        x1 = self.conv1(x)
+        x1 = self.activation(x1)
+        x1 = self.dropout(x1)
+        # x1 = self.conv2(x1)
         # N*1*64 -> N*64
-        x = x.squeeze()
-        return x
+        x1 = x1.squeeze()
+        return x1
 
 class CNN2D(nn.Module):
     def __init__(self):
@@ -258,42 +273,76 @@ class CNN2D(nn.Module):
         return x
 
 # Define the entire model
-class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle) as node input -------------- benchmark
-    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
-        super().__init__()
-        # use built-in Transformer ##################################
-        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2)
-        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2,
-                                                    k=mode_N)       
-        self.GNN = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
-        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
-        self.time_L = time_L
-        self.fft_n = fft_n
-        # self.norm = nn.BatchNorm1d(round((fft_n+2)/2))
-        # self.norm = nn.BatchNorm1d(time_L)
-    def forward(self, g):
-        node_in = g.ndata['acc_Y']
-        # node_in = self.norm(node_in)
-        # graph-level operation ##################################
-        graph_spatial = self.pooling1(g, node_in)
-        graph_spatial = self.pooling2(g, graph_spatial)
-        [B, LK] = graph_spatial.size()
-        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
-        # node-level operation ##################################
-        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
-        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle()
-        # normalization of features
-        # node_in_fft_abs = self.norm(node_in_fft_abs)
-        # node_in_fft_angle = self.norm(node_in_fft_angle)
-        node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)       
-        node_spatial = self.GNN(g, node_in_fft)
-        phi = self.node_decoder(node_spatial)
-        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
-        return q, phi # return mode responses and mode shapes
+# class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle) as node input -------------- benchmark
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)       
+#         self.GNN = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#         # self.norm = nn.BatchNorm1d(round((fft_n+2)/2))
+#         # self.norm = nn.BatchNorm1d(time_L)
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         # node_in = self.norm(node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_in)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
+#         node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle() / 1
+#         # normalization of features
+#         # node_in_fft_abs = self.norm(node_in_fft_abs)
+#         # node_in_fft_angle = self.norm(node_in_fft_angle)
+#         node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)       
+#         node_spatial = self.GNN(g, node_in_fft)
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle_smoothed) as node input
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)       
+#         self.GNN = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#         # self.norm = nn.BatchNorm1d(round((fft_n+2)/2))
+#         # self.norm = nn.BatchNorm1d(time_L)
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         # node_in = self.norm(node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_in)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         node_in_fft_abs = g.ndata['acc_Y_FFT_abs'] * 10
+#         node_in_fft_angle = g.ndata['acc_Y_FFT_angle'] / 3.14
+#         node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)       
+#         node_spatial = self.GNN(g, node_in_fft)
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
 
 # class Model_SAGE(nn.Module):   # GraphSAGE, use FFT.abs*FFT.angle as node input
 #     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
@@ -325,6 +374,171 @@ class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle) as node 
 #         phi = self.node_decoder(node_spatial)
 #         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
 #         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, new architecture, GNN first, Transformer readout next
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)
+#         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         node_spatial = self.GNN(g, node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_spatial)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, new architecture, GNN first, max/min/mean/WeightAndSum readout next, then use LSTM
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+#         self.pooling1 = dglnn.WeightAndSum(time_L)
+#         self.pooling2 = dglnn.MaxPooling()
+#         self.pooling3 = dglnn.AvgPooling()
+#         self.pooling4 = dglnn.SumPooling()
+#         self.graph_decoder = nn.LSTM(input_size=4, hidden_size=64, num_layers=2, batch_first=True)
+#         self.LSTM_decoder = MLP(64, dim, mode_N, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         node_spatial = self.GNN(g, node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = torch.stack((self.pooling1(g, node_spatial),
+#                                     self.pooling2(g, node_spatial),
+#                                     self.pooling3(g, node_spatial),
+#                                     self.pooling4(g, node_spatial)), dim=2)
+#         q, _ = self.graph_decoder(graph_spatial)
+#         q = self.LSTM_decoder(q)
+#         # node-level operation ##################################
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, new architecture, GNN first, max/min/mean readout next, then use LSTM+MLP to decode
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+#         self.pooling2 = dglnn.MaxPooling()
+#         self.pooling3 = dglnn.AvgPooling()
+#         self.pooling4 = dglnn.SumPooling()
+#         self.graph_decoder = nn.LSTM(input_size=3, hidden_size=64, num_layers=2, batch_first=True)
+#         self.LSTM_decoder = MLP(64, dim, mode_N, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         node_spatial = self.GNN(g, node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = torch.stack((self.pooling2(g, node_spatial),
+#                                     self.pooling3(g, node_spatial),
+#                                     self.pooling4(g, node_spatial)), dim=2)
+#         q, _ = self.graph_decoder(graph_spatial)
+#         q = self.LSTM_decoder(q)
+#         # node-level operation ##################################
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, new architecture, GNN first, max/min/mean readout next, then use Transformer to decode
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+#         self.pooling2 = dglnn.MaxPooling()
+#         self.pooling3 = dglnn.AvgPooling()
+#         self.pooling4 = dglnn.SumPooling()
+#         self.graph_decoder = TransformerTimeSeries(d_model=64, nhead=4, num_layers=4, seq_length=2000)
+#         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         node_spatial = self.GNN(g, node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = torch.stack((self.pooling2(g, node_spatial),
+#                                     self.pooling3(g, node_spatial),
+#                                     self.pooling4(g, node_spatial)), dim=2)
+#         q = self.graph_decoder(graph_spatial)
+#         # node-level operation ##################################
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+# class Model_SAGE(nn.Module):   # GraphSAGE, new architecture, GNN first, max/min/mean/WeightAndSum readout next, then use MLP to decode
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+#         self.pooling1 = dglnn.WeightAndSum(time_L)
+#         self.pooling2 = dglnn.MaxPooling()
+#         self.pooling3 = dglnn.AvgPooling()
+#         self.pooling4 = dglnn.SumPooling()
+#         self.graph_decoder = MLP(4, dim, mode_N, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         node_spatial = self.GNN(g, node_in)
+#         # graph-level operation ##################################
+#         graph_spatial = torch.stack((self.pooling1(g, node_spatial),
+#                                     self.pooling2(g, node_spatial),
+#                                     self.pooling3(g, node_spatial),
+#                                     self.pooling4(g, node_spatial)), dim=2)
+#         q = self.graph_decoder(graph_spatial)
+#         # node-level operation ##################################
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+class Model_SAGE(nn.Module):   # GraphSAGE, GNN first, choose the most important 10 nodes, then use LSTM+MLP to get modal responses q
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+        self.score = dglnn.SAGEConv(time_L, 1, aggregator_type='pool')
+        self.graph_decoder = nn.LSTM(input_size=20, hidden_size=64, num_layers=4, batch_first=True)
+        self.LSTM_decoder = MLP(64, dim, mode_N, dropout_rate, hid_layer)
+        self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        node_spatial = self.GNN(g, node_in)
+        g.ndata['node_spatial'] = node_spatial
+        # graph-level operation ##################################
+        graph_spatial = []
+        for graphs in dgl.unbatch(g):
+            scores = self.score(graphs, graphs.ndata['node_spatial']).squeeze()  # Shape: (num_nodes,)
+            _, topk = torch.topk(scores, 20, dim=0)
+            graph_spatial.append(graphs.ndata['node_spatial'][topk].T)
+        graph_spatial = torch.stack(graph_spatial, dim=0)
+        q, _ = self.graph_decoder(graph_spatial)
+        q = self.LSTM_decoder(q)
+        # node-level operation ##################################
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
 
 class Model_2SAGE_2MLP(nn.Module):   # GraphSAGE, use two GNNs and MLPs
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
@@ -427,6 +641,39 @@ class Model_CNN1D(nn.Module):   # GraphSAGE, use CNN to encode the FFT
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
+# class Model_CNN1D(nn.Module):   # GraphSAGE, use CNN to encode the FFT, use smooth FFT
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)       
+#         self.GNN = SAGE(dim, dim, dim, dropout_rate, hid_layer)
+#         self.node_encoder = CNN1D()
+#         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_in)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         node_in_fft_abs = g.ndata['acc_Y_FFT_abs'] * 10
+#         node_in_fft_angle = g.ndata['acc_Y_FFT_angle'] / 3.14
+#         node_in_fft = torch.stack([node_in_fft_abs, node_in_fft_angle], dim=1)
+#         node_in_hid = self.node_encoder(node_in_fft)
+#         node_spatial = self.GNN(g, node_in_hid)
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
 class Model_CNN2D(nn.Module):   # GraphSAGE, use CNN to encode the FFT
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
         super().__init__()
@@ -491,7 +738,7 @@ class Model_GIN(nn.Module):   # GIN
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
-class Model_GINE(nn.Module):   # GINE
+class Model_GINE(nn.Module):   # GINE, using geometry as edge features
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
         super().__init__()
         # use built-in Transformer ##################################
@@ -502,14 +749,14 @@ class Model_GINE(nn.Module):   # GINE
                                                     d_head=4, d_ff=256,
                                                     n_layers=2,
                                                     k=mode_N)       
-        self.GNN = GINE(fft_n+2, dim)
+        self.GNN = GINE(dropout_rate)
         self.edge_encoder = MLP(2, dim, fft_n+2, dropout_rate, hid_layer)
-        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.node_decoder = MLP(fft_n+2, dim, mode_N, dropout_rate, hid_layer)
         self.time_L = time_L
         self.fft_n = fft_n
     def forward(self, g):
         node_in = g.ndata['acc_Y']
-        edge_in = torch.cat([g.edata['L'], g.edata['theta']], dim=1)
+        edge_in = torch.cat([g.edata['L'], g.edata['theta']/360], dim=1)
         # graph-level operation ##################################
         graph_spatial = self.pooling1(g, node_in)
         graph_spatial = self.pooling2(g, graph_spatial)
@@ -525,7 +772,7 @@ class Model_GINE(nn.Module):   # GINE
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
-# class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as node features
+# class Model_GINE(nn.Module):   # GINE, using CPSD.real as edge features
 #     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
 #         super().__init__()
 #         # use built-in Transformer ##################################
@@ -536,32 +783,63 @@ class Model_GINE(nn.Module):   # GINE
 #                                                     d_head=4, d_ff=256,
 #                                                     n_layers=2,
 #                                                     k=mode_N)       
-#         # self.GNN = GINE_Linear(round(fft_n/2)+1, dim, dropout_rate)
 #         self.GNN = GINE(dropout_rate)
-#         self.node_decoder = MLP(round(fft_n/2)+1, dim, mode_N, dropout_rate, hid_layer)
+#         self.edge_encoder = MLP(round(fft_n/2)+1, dim, fft_n+2, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(fft_n+2, dim, mode_N, dropout_rate, hid_layer)
 #         self.time_L = time_L
 #         self.fft_n = fft_n
-#         self.norm = nn.BatchNorm1d(round(fft_n/2)+1)
 #     def forward(self, g):
-#         node_in_time = g.ndata['acc_Y']
-#         node_in_PSD = g.ndata['acc_Y_PSD']
-#         edge_in = g.edata['cpsd_angle'] / 3.14
-#         # edge_in = torch.sign(g.edata['cpsd_real'])
-        
-#         # node_in_PSD = self.norm(node_in_PSD)
-#         # edge_in = self.norm(edge_in)
+#         node_in = g.ndata['acc_Y']
+#         # edge_in = g.edata['cpsd_angle'] / 3.14
+#         edge_in = g.edata['cpsd_real'] * 1e7
 #         # graph-level operation ##################################
-#         graph_spatial = self.pooling1(g, node_in_time)
+#         graph_spatial = self.pooling1(g, node_in)
 #         graph_spatial = self.pooling2(g, graph_spatial)
 #         [B, LK] = graph_spatial.size()
 #         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
 #         # node-level operation ##################################
-#         node_spatial = self.GNN(g, node_in_PSD, edge_in)
+#         node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n ).abs()
+#         node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n ).angle()
+#         node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)
+#         edge_in_encoded = self.edge_encoder(edge_in)
+#         node_spatial = self.GNN(g, node_in_fft, edge_in_encoded)
 #         phi = self.node_decoder(node_spatial)
 #         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
 #         return q, phi # return mode responses and mode shapes
 
-class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as node features
+# class Model_EdgeGAT(nn.Module):   # GAT, using geometry as edge features
+#     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+#         super().__init__()
+#         # use built-in Transformer ##################################
+#         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2)
+#         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+#                                                     d_head=4, d_ff=256,
+#                                                     n_layers=2,
+#                                                     k=mode_N)       
+#         self.GNN = EdgeGAT(fft_n+2, dim, dim, 2, dropout_rate, hid_layer)
+#         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+#         self.time_L = time_L
+#         self.fft_n = fft_n
+#     def forward(self, g):
+#         node_in = g.ndata['acc_Y']
+#         edge_in = torch.cat([g.edata['L'], g.edata['theta']/360], dim=1)
+#         # graph-level operation ##################################
+#         graph_spatial = self.pooling1(g, node_in)
+#         graph_spatial = self.pooling2(g, graph_spatial)
+#         [B, LK] = graph_spatial.size()
+#         q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+#         # node-level operation ##################################
+#         node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n ).abs()
+#         node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n ).angle()
+#         node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)
+#         node_spatial = self.GNN(g, node_in_fft, edge_in)
+#         phi = self.node_decoder(node_spatial)
+#         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+#         return q, phi # return mode responses and mode shapes
+
+class Model_EdgeGAT(nn.Module):   # GAT, using CPSD.real as edge features
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
         super().__init__()
         # use built-in Transformer ##################################
@@ -572,16 +850,13 @@ class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as 
                                                     d_head=4, d_ff=256,
                                                     n_layers=2,
                                                     k=mode_N)       
-        # self.GNN = GINE_Linear(round(fft_n/2)+1, dim, dropout_rate)
-        self.GNN = GINE(dropout_rate)
-        self.edge_encoder = MLP(round(fft_n/2)+1, dim, fft_n+2, dropout_rate, hid_layer)
-        self.node_decoder = MLP(fft_n+2, dim, mode_N, dropout_rate, hid_layer)
+        self.GNN = EdgeGAT(fft_n+2, dim, dim, round(fft_n/2)+1, dropout_rate, hid_layer)
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
         self.time_L = time_L
         self.fft_n = fft_n
     def forward(self, g):
         node_in = g.ndata['acc_Y']
-        # edge_in = g.edata['cpsd_angle'] / 3.14
-        edge_in = torch.sign(g.edata['cpsd_real'])
+        edge_in = g.edata['cpsd_real'] * 1e7
         # graph-level operation ##################################
         graph_spatial = self.pooling1(g, node_in)
         graph_spatial = self.pooling2(g, graph_spatial)
@@ -591,41 +866,11 @@ class Model_GINE_CPSD(nn.Module):   # GINE, using CPSD as edge features, PSD as 
         node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n ).abs()
         node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n ).angle()
         node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)
-        edge_in_encoded = self.edge_encoder(edge_in)
-        node_spatial = self.GNN(g, node_in_fft, edge_in_encoded)
+        node_spatial = self.GNN(g, node_in_fft, edge_in)
         phi = self.node_decoder(node_spatial)
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
-class Model_EdgeGAT(nn.Module):   # GAT, using CPSD as edge features, PSD as node features
-    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
-        super().__init__()
-        # use built-in Transformer ##################################
-        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2)
-        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2,
-                                                    k=mode_N)       
-        self.GNN = EdgeGAT(round(fft_n/2)+1, dim, dim, round(fft_n/2)+1, dropout_rate, hid_layer)
-        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
-        self.time_L = time_L
-        self.fft_n = fft_n
-    def forward(self, g):
-        node_in_time = g.ndata['acc_Y']
-        node_in_PSD = g.ndata['acc_Y_PSD']
-        edge_in = g.edata['cpsd_angle']
-        # graph-level operation ##################################
-        graph_spatial = self.pooling1(g, node_in_time)
-        graph_spatial = self.pooling2(g, graph_spatial)
-        [B, LK] = graph_spatial.size()
-        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
-        # node-level operation ##################################
-        node_spatial = self.GNN(g, node_in_PSD, edge_in)
-        phi = self.node_decoder(node_spatial)
-        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
-        return q, phi # return mode responses and mode shapes
 
 class Model_CFC(nn.Module):   # CFConv, using CPSD as edge features, [FFT.abs, FFT.angle] as node features
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):

@@ -1,0 +1,21 @@
+{"time":"2024-10-09T21:39:20.0881793+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-09T21:39:20.0886952+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241009_213920-umoj5ngq\\logs\\debug-core.log"}
+{"time":"2024-10-09T21:39:20.089739+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-09T21:39:20.089739+02:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\14360\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241009_213920-umoj5ngq\\logs\\debug-core.log"}
+{"time":"2024-10-09T21:39:20.0962526+02:00","level":"INFO","msg":"created new stream","id":"umoj5ngq"}
+{"time":"2024-10-09T21:39:20.0962526+02:00","level":"INFO","msg":"stream: started","id":"umoj5ngq"}
+{"time":"2024-10-09T21:39:20.0962526+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:39:20.0962526+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:39:20.0962526+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:39:20.376459+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-09T21:39:20.3769645+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-09T21:57:10.2596588+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-09T21:57:10.2596588+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-09T21:57:10.5446155+02:00","level":"WARN","msg":"No job ingredients found, not creating job artifact"}
+{"time":"2024-10-09T21:57:10.5446155+02:00","level":"WARN","msg":"No source type found, not creating job artifact"}
+{"time":"2024-10-09T21:57:10.5446155+02:00","level":"INFO","msg":"sender: sendDefer: no job artifact to save"}
+{"time":"2024-10-09T21:57:12.2423352+02:00","level":"INFO","msg":"stream: closing","id":"umoj5ngq"}
+{"time":"2024-10-09T21:57:12.2423352+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:57:12.2423352+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:57:12.2423352+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"umoj5ngq"}}
+{"time":"2024-10-09T21:57:12.2423352+02:00","level":"INFO","msg":"stream: closed","id":"umoj5ngq"}

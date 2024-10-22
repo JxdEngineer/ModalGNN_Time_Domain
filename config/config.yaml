@@ -4,13 +4,12 @@ shared:
     time_0: 2000
 
 model:
-    # name: "SAGE"
-    # name: "GINE"
-    name: "SAGE_CNN1D"
+    name: "SAGE"
+    # name: "SAGE_CNN1D"
     # name: "SAGE_CNN2D"
     # name: "SAGE2MLP1"
     # name: "SAGE2MLP2"
-    # name: "GINE_CPSD"
+    # name: "GINE"
     # name: "EdgeGAT"
     # name: "CFC"
     # name: "GatedGraphConv"
@@ -26,6 +25,6 @@ data:
     
 train:
     learning_rate: 0.0005
-    epochs: 20000
+    epochs: 10000
     step_size: 100
     gamma: 0.999

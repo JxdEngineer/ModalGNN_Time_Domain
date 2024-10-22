@@ -50,7 +50,7 @@ def train(config_path):
     model.to(device)
     print('Create model: done')
     
-    train_no = np.array(range(0, 90))
+    train_no = np.array(range(0, 95))
     # train_no = np.concatenate((np.array(range(0, 40)), np.array(range(50, 100))))
     valid_no = np.array(range(95, 100))
     dataloader_train = get_dataset(data_path=config['data']['path'], 

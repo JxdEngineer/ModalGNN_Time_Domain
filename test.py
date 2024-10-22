@@ -99,7 +99,7 @@ for graph_test in dataloader_test:
         ax[i, 1].set_ylabel('PSD', fontsize=14)
         ax[i, 1].grid(True)
         ax[i, 1].legend()
-        ax[i, 1].set_xlim(0, 100)
+        ax[i, 1].set_xlim(0, 50)
         for j in range(5):
             ax[i, 1].plot([freq_test[j], freq_test[j]], [0, max(psd_pred)], color='#FF1F5B')   
     

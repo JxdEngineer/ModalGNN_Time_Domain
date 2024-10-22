@@ -4,11 +4,15 @@ shared:
     time_0: 2000
 
 model:
-    name: "SAGE"
+    # name: "SAGE"
     # name: "SAGE_CNN1D"
     # name: "SAGE_CNN2D"
     # name: "SAGE2MLP1"
     # name: "SAGE2MLP2"
+    # name: "SAGE_LSTM_TopK"
+    # name: "SAGE_Set2Set"  # does not work
+    # name: "SAGE_1st"
+    name: "SAGE_1st_LSTM"
     # name: "GINE"
     # name: "EdgeGAT"
     # name: "CFC"
@@ -25,6 +29,6 @@ data:
     
 train:
     learning_rate: 0.0005
-    epochs: 10000
+    epochs: 5000
     step_size: 100
-    gamma: 0.999
+    gamma: 1

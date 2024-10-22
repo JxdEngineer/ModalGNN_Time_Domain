@@ -34,6 +34,7 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
     
     loss1 = loss_func(acc_pred, acc_true)
     # loss1 = loss_func(acc_pred/acc_true, torch.ones_like(acc_true))  # normalized loss, does not work because some acc_true=0
+    # loss1 = loss_func(torch.fft.rfft(acc_pred, n=fft_n).abs(), torch.fft.rfft(acc_true, n=fft_n).abs())
     
     loss2 = loss_func(q_corr, batched_eye)
     

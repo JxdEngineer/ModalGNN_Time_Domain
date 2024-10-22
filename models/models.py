@@ -375,6 +375,37 @@ class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle) as node 
 #         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
 #         return q, phi # return mode responses and mode shapes
 
+class Model_SAGE_LSTM_encoder(nn.Module):   # GraphSAGE, new architecture, q: GNN first, Transformer readout, phi: LSTM encode + GNN
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=2, 
+                                                    d_head=2, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=2, 
+                                                    d_head=2, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)
+        self.GNN = SAGE(dim, dim, dim, dropout_rate, hid_layer)
+        self.node_encoder = nn.LSTM(input_size=1, hidden_size=dim, num_layers=1, batch_first=True)
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_in)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L)) 
+        # node-level operation ##################################
+        _, (h_n, _) = self.node_encoder(node_in.unsqueeze(2))
+        node_temporal = h_n[-1]
+        node_spatial = self.GNN(g, node_temporal)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
+
 class Model_SAGE_1st(nn.Module):   # GraphSAGE, new architecture, GNN first, Transformer readout next
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
         super().__init__()
@@ -1049,6 +1080,7 @@ def create_model(model_name, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer
         return Model_SAGE_1st(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     elif model_name == 'SAGE_1st_LSTM':
         return Model_SAGE_1st_LSTM(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
-    
+    elif model_name == 'SAGE_LSTM_encoder':
+        return Model_SAGE_LSTM_encoder(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     else:
         raise ValueError(f"Model {model_name} not recognized.")

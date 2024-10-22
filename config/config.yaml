@@ -12,7 +12,8 @@ model:
     # name: "SAGE_LSTM_TopK"
     # name: "SAGE_Set2Set"  # does not work
     # name: "SAGE_1st"
-    name: "SAGE_1st_LSTM"
+    # name: "SAGE_1st_LSTM"
+    name: "SAGE_LSTM_encoder"
     # name: "GINE"
     # name: "EdgeGAT"
     # name: "CFC"

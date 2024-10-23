@@ -26,8 +26,8 @@ model:
 data:
     # path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local, 100 truss dataset
     # path: "/cluster/work/ibk_chatzi/Xudong//trapezoid_time_bottom_input_100sample_lowpass.mat" # ETH Euler, 100 truss dataset
-    path: "C:/Users/14360/Desktop/truss_500_lowpass.mat" # local, 500 truss dataset
-    # path: "/cluster/work/ibk_chatzi/Xudong//truss_500_lowpass.mat" # ETH Euler, 500 truss dataset
+    # path: "C:/Users/14360/Desktop/truss_500_lowpass.mat" # local, 500 truss dataset
+    path: "/cluster/work/ibk_chatzi/Xudong//truss_500_lowpass.mat" # ETH Euler, 500 truss dataset
     
     bs: 128
     

@@ -45,6 +45,7 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
+# test_no = np.array([6-1]) # number of the tested truss
 test_no = np.array([96-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path=config['data']['path'], 
                         bs=config['data']['bs'], 

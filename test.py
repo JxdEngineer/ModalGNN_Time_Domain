@@ -42,7 +42,6 @@ model = create_model(model_name=config['model']['name'],
 PATH = config['model']['name'] + ".pth"
 model.load_state_dict(torch.load(PATH))
 
-
 model.eval()
 
 # test_no = np.array([8-1]) # number of the tested truss

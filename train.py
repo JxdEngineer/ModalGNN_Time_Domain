@@ -50,7 +50,7 @@ def train(config_path):
     model.to(device)
     print('Create model: done')
     
-    train_no = np.array(range(0, 5))
+    train_no = np.array(range(0, 10))
     # train_no = np.concatenate((np.array(range(0, 40)), np.array(range(50, 100))))
     valid_no = np.array(range(495, 500))
     dataloader_train = get_dataset(data_path=config['data']['path'], 
@@ -105,8 +105,8 @@ def train(config_path):
         
     # coefficients of different loss terms
     c1 = 1
-    c2 = 1
-    c3 = 1
+    c2 = 10
+    c3 = 10
     c4 = 0
     # c5 = 0
     

@@ -1,0 +1,11 @@
+{"time":"2024-10-23T18:44:03.657056937+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-23T18:44:03.657076787+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241023_184403-n1ut351p/logs/debug-core.log"}
+{"time":"2024-10-23T18:44:03.657651767+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-23T18:44:03.657665247+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241023_184403-n1ut351p/logs/debug-core.log"}
+{"time":"2024-10-23T18:44:03.661776+02:00","level":"INFO","msg":"created new stream","id":"n1ut351p"}
+{"time":"2024-10-23T18:44:03.66179468+02:00","level":"INFO","msg":"stream: started","id":"n1ut351p"}
+{"time":"2024-10-23T18:44:03.66180904+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"n1ut351p"}}
+{"time":"2024-10-23T18:44:03.66185859+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"n1ut351p"}}
+{"time":"2024-10-23T18:44:03.66190211+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"n1ut351p"}}
+{"time":"2024-10-23T18:44:03.928757529+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-23T18:44:03.932358091+02:00","level":"INFO","msg":"Starting system monitor"}

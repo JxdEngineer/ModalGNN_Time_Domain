@@ -656,6 +656,38 @@ class Model_SAGE_Set2Set(nn.Module):   # GraphSAGE, GNN first, Set2Set to get mo
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
+class Model_SAGE_two(nn.Module):   # GraphSAGE, new architecture, one GNN for q, one GNN for phi
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=256,
+                                                    n_layers=2,
+                                                    k=mode_N)
+        self.GNN_q = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+        self.GNN_phi = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
+        self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        # graph-level operation ##################################
+        graph_spatial = self.GNN_q(g, node_in)
+        graph_spatial = self.pooling1(g, graph_spatial)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        [B, LK] = graph_spatial.size()
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        # node-level operation ##################################
+        node_in_fft_abs = torch.fft.rfft(node_in, n=self.fft_n).abs()
+        node_in_fft_angle = torch.fft.rfft(node_in, n=self.fft_n).angle() / 3.14
+        node_in_fft = torch.cat([node_in_fft_abs, node_in_fft_angle], dim=1)       
+        node_spatial = self.GNN_phi(g, node_in_fft)
+        phi = self.node_decoder(node_spatial)
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        return q, phi # return mode responses and mode shapes
 
 class Model_2SAGE_2MLP(nn.Module):   # GraphSAGE, use two GNNs and MLPs
     def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
@@ -1082,5 +1114,7 @@ def create_model(model_name, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer
         return Model_SAGE_1st_LSTM(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     elif model_name == 'SAGE_LSTM_encoder':
         return Model_SAGE_LSTM_encoder(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'SAGE_two':
+        return Model_SAGE_two(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     else:
         raise ValueError(f"Model {model_name} not recognized.")

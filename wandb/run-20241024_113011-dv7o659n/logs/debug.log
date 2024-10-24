@@ -23,3 +23,10 @@ config: {'mode_N': 7, 'time_L': 2000, 'time_0': 2000, 'model_dim': 64, 'fft_n': 
 2024-10-24 11:30:12,107 INFO    MainThread:2356805 [wandb_run.py:_redirect():2372] Wrapping output streams.
 2024-10-24 11:30:12,107 INFO    MainThread:2356805 [wandb_run.py:_redirect():2397] Redirects installed.
 2024-10-24 11:30:12,109 INFO    MainThread:2356805 [wandb_init.py:init():900] run started, returning control to user process
+2024-10-24 12:50:45,092 INFO    MainThread:2356805 [wandb_run.py:_finish():2158] finishing run jxd-engineer/ModalGNN_TimeDomain/dv7o659n
+2024-10-24 12:50:45,092 INFO    MainThread:2356805 [wandb_run.py:_atexit_cleanup():2422] got exitcode: 0
+2024-10-24 12:50:45,092 INFO    MainThread:2356805 [wandb_run.py:_restore():2404] restore
+2024-10-24 12:50:45,092 INFO    MainThread:2356805 [wandb_run.py:_restore():2410] restore done
+2024-10-24 12:50:47,235 INFO    MainThread:2356805 [wandb_run.py:_footer_history_summary_info():4037] rendering history
+2024-10-24 12:50:47,236 INFO    MainThread:2356805 [wandb_run.py:_footer_history_summary_info():4069] rendering summary
+2024-10-24 12:50:47,247 INFO    MainThread:2356805 [wandb_run.py:_footer_sync_info():3996] logging synced files

@@ -9,3 +9,10 @@
 {"time":"2024-10-24T11:30:11.71868427+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"dv7o659n"}}
 {"time":"2024-10-24T11:30:12.020049217+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
 {"time":"2024-10-24T11:30:12.022134405+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-24T12:50:45.093091145+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-24T12:50:45.093759378+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-24T12:50:47.248222884+02:00","level":"INFO","msg":"stream: closing","id":"dv7o659n"}
+{"time":"2024-10-24T12:50:47.248247554+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"dv7o659n"}}
+{"time":"2024-10-24T12:50:47.248277334+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"dv7o659n"}}
+{"time":"2024-10-24T12:50:47.248326194+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"dv7o659n"}}
+{"time":"2024-10-24T12:50:47.248758996+02:00","level":"INFO","msg":"stream: closed","id":"dv7o659n"}

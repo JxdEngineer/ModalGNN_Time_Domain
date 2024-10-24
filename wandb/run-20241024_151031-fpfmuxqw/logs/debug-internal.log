@@ -1,0 +1,18 @@
+{"time":"2024-10-24T15:10:31.771064986+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-24T15:10:31.771864279+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241024_151031-fpfmuxqw/logs/debug-core.log"}
+{"time":"2024-10-24T15:10:31.772570992+02:00","level":"INFO","msg":"using version","core version":"0.18.1"}
+{"time":"2024-10-24T15:10:31.772578292+02:00","level":"INFO","msg":"created symlink","path":"/cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241024_151031-fpfmuxqw/logs/debug-core.log"}
+{"time":"2024-10-24T15:10:31.775930896+02:00","level":"INFO","msg":"created new stream","id":"fpfmuxqw"}
+{"time":"2024-10-24T15:10:31.775950456+02:00","level":"INFO","msg":"stream: started","id":"fpfmuxqw"}
+{"time":"2024-10-24T15:10:31.775975056+02:00","level":"INFO","msg":"sender: started","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:10:31.775965376+02:00","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:10:31.776003366+02:00","level":"INFO","msg":"handler: started","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:10:32.010232087+02:00","level":"INFO","msg":"wandb-core","!BADKEY":null}
+{"time":"2024-10-24T15:10:32.014526065+02:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-10-24T15:25:16.67803981+02:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-10-24T15:25:16.678875703+02:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-10-24T15:25:20.782092196+02:00","level":"INFO","msg":"stream: closing","id":"fpfmuxqw"}
+{"time":"2024-10-24T15:25:20.782114296+02:00","level":"INFO","msg":"handler: closed","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:25:20.782147476+02:00","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:25:20.782150466+02:00","level":"INFO","msg":"sender: closed","stream_id":{"value":"fpfmuxqw"}}
+{"time":"2024-10-24T15:25:20.782584508+02:00","level":"INFO","msg":"stream: closed","id":"fpfmuxqw"}

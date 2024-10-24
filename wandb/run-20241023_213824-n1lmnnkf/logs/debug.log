@@ -1,0 +1,32 @@
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Current SDK version is 0.18.1
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Configure stats pid to 2197946
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Loading settings from /cluster/home/xudjian/.config/wandb/settings
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Loading settings from /cluster/home/xudjian/ModalGNN_Time_Domain/wandb/settings
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Loading settings from environment variables: {}
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Applying setup settings: {'mode': None, '_disable_service': None}
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Inferring run settings from compute environment: {'program_relpath': 'train.py', 'program_abspath': '/cluster/home/xudjian/ModalGNN_Time_Domain/train.py', 'program': '/cluster/home/xudjian/ModalGNN_Time_Domain/train.py'}
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_setup.py:_flush():77] Applying login settings: {}
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_init.py:_log_setup():532] Logging user logs to /cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241023_213824-n1lmnnkf/logs/debug.log
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_init.py:_log_setup():533] Logging internal logs to /cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241023_213824-n1lmnnkf/logs/debug-internal.log
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_init.py:init():616] calling init triggers
+2024-10-23 21:38:24,206 INFO    MainThread:2197946 [wandb_init.py:init():623] wandb.init called with sweep_config: {}
+config: {'mode_N': 7, 'time_L': 2000, 'time_0': 2000, 'model_dim': 64, 'fft_n': 1024, 'dropout_rate': 0.1, 'hid_layer': 1, 'batch_size': 128, 'learning_rate': 0.0002, 'step_size': 100, 'gamma': 1, 'train_N': 10, 'model_name': 'SAGE'}
+2024-10-23 21:38:24,207 INFO    MainThread:2197946 [wandb_init.py:init():666] starting backend
+2024-10-23 21:38:24,207 INFO    MainThread:2197946 [wandb_init.py:init():670] setting up manager
+2024-10-23 21:38:24,207 INFO    MainThread:2197946 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-10-23 21:38:24,209 INFO    MainThread:2197946 [wandb_init.py:init():678] backend started and connected
+2024-10-23 21:38:24,211 INFO    MainThread:2197946 [wandb_init.py:init():773] updated telemetry
+2024-10-23 21:38:24,222 INFO    MainThread:2197946 [wandb_init.py:init():806] communicating run to backend with 90.0 second timeout
+2024-10-23 21:38:24,497 INFO    MainThread:2197946 [wandb_init.py:init():857] starting run threads in backend
+2024-10-23 21:38:24,583 INFO    MainThread:2197946 [wandb_run.py:_console_start():2459] atexit reg
+2024-10-23 21:38:24,583 INFO    MainThread:2197946 [wandb_run.py:_redirect():2307] redirect: wrap_raw
+2024-10-23 21:38:24,583 INFO    MainThread:2197946 [wandb_run.py:_redirect():2372] Wrapping output streams.
+2024-10-23 21:38:24,583 INFO    MainThread:2197946 [wandb_run.py:_redirect():2397] Redirects installed.
+2024-10-23 21:38:24,585 INFO    MainThread:2197946 [wandb_init.py:init():900] run started, returning control to user process
+2024-10-23 21:42:33,835 INFO    MainThread:2197946 [wandb_run.py:_finish():2158] finishing run jxd-engineer/ModalGNN_TimeDomain/n1lmnnkf
+2024-10-23 21:42:33,836 INFO    MainThread:2197946 [wandb_run.py:_atexit_cleanup():2422] got exitcode: 0
+2024-10-23 21:42:33,836 INFO    MainThread:2197946 [wandb_run.py:_restore():2404] restore
+2024-10-23 21:42:33,836 INFO    MainThread:2197946 [wandb_run.py:_restore():2410] restore done
+2024-10-23 21:42:38,068 INFO    MainThread:2197946 [wandb_run.py:_footer_history_summary_info():4037] rendering history
+2024-10-23 21:42:38,069 INFO    MainThread:2197946 [wandb_run.py:_footer_history_summary_info():4069] rendering summary
+2024-10-23 21:42:38,079 INFO    MainThread:2197946 [wandb_run.py:_footer_sync_info():3996] logging synced files

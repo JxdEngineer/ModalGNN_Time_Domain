@@ -1,0 +1,10 @@
+/cluster/home/xudjian/ModalGNN_Time_Domain/data/dataset_loader.py:190: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:261.)
+  self.freqs = torch.tensor(self.freqs, dtype = torch.float).to(self.device)
+wandb: Using wandb-core as the SDK backend. Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jxd-engineer. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.18.1
+wandb: Run data is saved locally in /cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241024_113011-dv7o659n
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run pretty-wildflower-122
+wandb: ⭐️ View project at https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain
+wandb: 🚀 View run at https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain/runs/dv7o659n

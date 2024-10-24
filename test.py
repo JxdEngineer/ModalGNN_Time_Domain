@@ -44,8 +44,8 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-test_no = np.array([8-1]) # number of the tested truss
-# test_no = np.array([498-1]) # number of the tested truss
+# test_no = np.array([2-1]) # number of the tested truss
+test_no = np.array([220-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path=config['data']['path'], 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -133,6 +133,11 @@ for graph_test in dataloader_test:
         node_pred[:, 1] = node_test[:, 1] + phi_pred
         
         phi_true = graph_test[0].ndata['phi_Y'][:, mode_no].detach().numpy().squeeze() * 3
+        # print( np.sum(phi_true**2) ) # measure complexity of mode shapes
+        # print( np.sqrt(np.mean(np.diff(phi_true)**2)) )  # measure complexity of mode shapes
+        phi_bottom = phi_true[node_test[:, 1] == 0]
+        print( np.sqrt(np.sum(np.diff(phi_bottom)**2)) )
+        
         node_true = np.zeros([len(node_test), 2])
         node_true[:, 0] = node_test[:, 0]
         node_true[:, 1] = node_test[:, 1] + phi_true

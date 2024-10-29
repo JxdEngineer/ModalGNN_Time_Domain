@@ -46,7 +46,7 @@ model.eval()
 
 # test_no = np.array([1-1]) # number of the tested truss
 test_no = np.array([220-1]) # number of the tested truss
-dataloader_test = get_dataset(data_path=config['data']['path'], 
+dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
                         time_0=config['shared']['time_0'], 

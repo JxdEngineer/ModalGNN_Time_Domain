@@ -44,8 +44,8 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-# test_no = np.array([6-1]) # number of the tested truss
-test_no = np.array([398-1]) # number of the tested truss
+test_no = np.array([6-1]) # number of the tested truss
+# test_no = np.array([98-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 

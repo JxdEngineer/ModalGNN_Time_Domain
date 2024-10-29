@@ -1,3 +1,0 @@
-/cluster/home/xudjian/ModalGNN_Time_Domain/data/dataset_loader.py:190: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:261.)
-  self.freqs = torch.tensor(self.freqs, dtype = torch.float).to(self.device)
-slurmstepd: error: *** JOB 13558933 ON eu-lo-g2-027 CANCELLED AT 2024-10-29T16:33:24 ***

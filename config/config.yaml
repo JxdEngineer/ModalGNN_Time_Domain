@@ -22,7 +22,7 @@ model:
     dim: 64
     fft_n: 1024
     dropout_rate: 0.1
-    hid_layer: 0
+    hid_layer: 1
     
 data:
     # path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local, 100 truss dataset

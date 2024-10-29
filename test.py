@@ -44,7 +44,7 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-# test_no = np.array([2-1]) # number of the tested truss
+# test_no = np.array([1-1]) # number of the tested truss
 test_no = np.array([220-1]) # number of the tested truss
 dataloader_test = get_dataset(data_path=config['data']['path'], 
                         bs=config['data']['bs'], 
@@ -133,14 +133,18 @@ for graph_test in dataloader_test:
         node_pred[:, 1] = node_test[:, 1] + phi_pred
         
         phi_true = graph_test[0].ndata['phi_Y'][:, mode_no].detach().numpy().squeeze() * 3
-        # print( np.sum(phi_true**2) ) # measure complexity of mode shapes
-        # print( np.sqrt(np.mean(np.diff(phi_true)**2)) )  # measure complexity of mode shapes
-        phi_bottom = phi_true[node_test[:, 1] == 0]
-        print( np.sqrt(np.sum(np.diff(phi_bottom)**2)) )
-        
         node_true = np.zeros([len(node_test), 2])
         node_true[:, 0] = node_test[:, 0]
         node_true[:, 1] = node_test[:, 1] + phi_true
+        
+        # show the complexity of mode shapes - curvature
+        phi_true_bottom = phi_true[node_test[:, 1] == 0]
+        phi_true_bottom = np.concatenate((phi_true_bottom[1:], phi_true_bottom[:1]))
+        # print( np.sqrt(np.sum(np.diff(phi_true_bottom)**2)) )
+        phi_pred_bottom = phi_pred[node_test[:, 1] == 0]
+        phi_pred_bottom = np.concatenate((phi_pred_bottom[1:], phi_pred_bottom[:1]))
+        # print(np.sqrt(np.sum(np.diff(phi_pred_bottom)**2)) )
+        
         
         for ele in element_test:
             node1 = node_test[ele[0]]
@@ -158,6 +162,8 @@ for graph_test in dataloader_test:
         ax[mode_no, 3-1].plot(node_pred[~node_mask, 0], node_pred[~node_mask, 1], 's', markersize=3, label='identified_unknown', color='#00CD6C')
         ax[mode_no, 3-1].grid()
         ax[mode_no, 3-1].set_ylabel('shape_id')
+        title_text = "curvature={:.3f}".format(np.sqrt(np.sum(np.diff(phi_pred_bottom)**2)))
+        ax[mode_no, 3-1].set_title(title_text, fontsize=12)  
         
         # ax[mode_no, 2].hist(q_pred_test[:, mode_no].to('cpu').detach().numpy(), bins=100, edgecolor='black')
         # ax[mode_no, 2].set_title('Histogram of Modal Responses')
@@ -179,7 +185,7 @@ for graph_test in dataloader_test:
         ax[mode_no, 4-1].grid()
         # ylabel_text = "shape={:.0f}".format(mode_no+1)
         ax[mode_no, 4-1].set_ylabel('shape_true')
-        title_text = "mode={:.0f}, f={:.3f}, zeta={:.4f}".format(mode_no+1, freq_test[mode_no], damping_test[mode_no])
+        title_text = "mode={:.0f}, f={:.3f}, zeta={:.4f}, curvature={:.3f}".format(mode_no+1, freq_test[mode_no], damping_test[mode_no], np.sqrt(np.sum(np.diff(phi_true_bottom)**2)))
         ax[mode_no, 4-1].set_title(title_text, fontsize=12)  
         
         count = count + 1 

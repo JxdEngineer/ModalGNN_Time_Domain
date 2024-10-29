@@ -105,8 +105,8 @@ def train(config_path):
         
     # coefficients of different loss terms
     c1 = 1
-    c2 = 1
-    c3 = 1
+    c2 = 10
+    c3 = 10
     c4 = 0
     # c5 = 0
     

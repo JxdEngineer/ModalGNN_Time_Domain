@@ -16,6 +16,20 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
         q_pred_unbatched = q_pred[i, :, :]
         q_pred_unbatched_fft = torch.fft.rfft(q_pred_unbatched.T, n=fft_n).abs()
         phi_pred_unbatched = phi_pred[phi_index1:phi_index2]
+           
+        # sort out phi from low-order modes to high-order modes, based on the complexity of mode shapes
+        # node = graph_unbatched[i].ndata['node']
+        # phi_pred_bottom = phi_pred_unbatched[node[:, 1] == 0, :]
+        # phi_pred_bottom = torch.concatenate((phi_pred_bottom[1:, :], phi_pred_bottom[:1, :]), 0)
+        # curvature = torch.sum(torch.diff(phi_pred_bottom, n=1, dim=0)**2, dim=0)
+        # _, sorted_indices = torch.sort(curvature, descending=False)
+        # phi_pred_unbatched = phi_pred_unbatched[:, sorted_indices]
+        
+        # sort out q from low-order modes to high-order modes, based on the dominant frequency
+        # _, q_pred_fft_max_indices = torch.max(q_pred_unbatched_fft.T, dim=0)
+        # q_pred_sorted_indices = torch.argsort(q_pred_fft_max_indices)
+        # q_pred_unbatched = q_pred_unbatched[:, q_pred_sorted_indices]
+        
         if i == 0:
             acc_pred = phi_pred_unbatched @ q_pred_unbatched.T
             q_corr = torch.corrcoef(q_pred_unbatched.T)

@@ -34,6 +34,6 @@ data:
     
 train:
     learning_rate: 0.0005
-    epochs: 5000
+    epochs: 2000
     step_size: 100
     gamma: 1

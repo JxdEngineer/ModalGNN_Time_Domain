@@ -434,13 +434,13 @@ class Model_SAGE_1st(nn.Module):   # GraphSAGE, new architecture, GNN first, Tra
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         
         # sort out q from low-order modes to high-order modes, based on the dominant frequency
-        g_unbatched = dgl.unbatch(g)
-        for i in range(len(g_unbatched)):
-            q_unbatched = q[i, :, :]
-            q_unbatched_fft = torch.fft.rfft(q_unbatched.T, n=self.fft_n).abs()
-            _, q_fft_max_indices = torch.max(q_unbatched_fft.T, dim=0)
-            q_sorted_indices = torch.argsort(q_fft_max_indices)
-            q[i, :, :] = q_unbatched[:, q_sorted_indices]
+        # g_unbatched = dgl.unbatch(g)
+        # for i in range(len(g_unbatched)):
+        #     q_unbatched = q[i, :, :]
+        #     q_unbatched_fft = torch.fft.rfft(q_unbatched.T, n=self.fft_n).abs()
+        #     _, q_fft_max_indices = torch.max(q_unbatched_fft.T, dim=0)
+        #     q_sorted_indices = torch.argsort(q_fft_max_indices)
+        #     q[i, :, :] = q_unbatched[:, q_sorted_indices]
         return q, phi # return mode responses and mode shapes
 
 # class Model_SAGE_1st_LSTM(nn.Module):   # GraphSAGE, new architecture, q: GNN first, Transformer readout, phi: LSTM encode + GNN

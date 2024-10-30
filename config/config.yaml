@@ -22,7 +22,7 @@ model:
     dim: 64
     fft_n: 1024
     dropout_rate: 0.1
-    hid_layer: 1
+    hid_layer: 0
     
 data:
     # path: "C:/Users/14360/Desktop/trapezoid_time_bottom_input_100sample_lowpass.mat" # local, 100 truss dataset
@@ -34,6 +34,6 @@ data:
     
 train:
     learning_rate: 0.0005
-    epochs: 20000
+    epochs: 5000
     step_size: 100
-    gamma: 0.98
+    gamma: 1

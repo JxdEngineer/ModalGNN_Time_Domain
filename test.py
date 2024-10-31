@@ -46,8 +46,8 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-# test_no = np.array([2-1]) # sample from the training set
-test_no = np.array([298-1]) # sample from the testing set
+test_no = np.array([2-1]) # sample from the training set
+# test_no = np.array([298-1]) # sample from the testing set
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 

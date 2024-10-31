@@ -35,7 +35,7 @@ plt.semilogy(loss_valid_meter, label='valid loss: '+f"{loss_valid_meter[-1]:.6f}
 plt.ylabel('MSE loss', fontsize=14)
 plt.xlabel('Epoch', fontsize=14)
 title_text = "Time={:.3f}".format(time_train[-1])
-plt.ylim([0.001, 10])
+# plt.ylim([0.001, 10])
 plt.title(title_text)
 plt.grid()
 plt.legend()

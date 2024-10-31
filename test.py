@@ -8,6 +8,7 @@ from scipy.signal import welch
 
 from models.models import create_model
 from data.dataset_loader import get_dataset
+# from utils.autocorrelation import autocorrelation
 import yaml
 
 
@@ -44,8 +45,9 @@ model.load_state_dict(torch.load(PATH))
 
 model.eval()
 
-# test_no = np.array([6-1]) # number of the tested truss
-test_no = np.array([98-1]) # number of the tested truss
+# designate sample no. for testing ######################################
+test_no = np.array([2-1]) # sample from the training set
+# test_no = np.array([40-1]) # sample from the testing set
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -55,6 +57,7 @@ dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpas
                         device='cpu')
 print('Create dataset: done')
 
+# %% plot test results
 plt.close('all')
 count = 0
 for graph_test in dataloader_test:
@@ -71,6 +74,27 @@ for graph_test in dataloader_test:
     q_pred_test, phi_pred_test = model(graph_test[0])
     # phi_pred_test = graph_test.ndata['phi_Y']  # use true phi for testing
     q_pred_test = torch.squeeze(q_pred_test, 0)
+    
+    
+    # sort out q from low-order modes to high-order modes, based on the dominant frequency, then also sort out phi
+    # calulate PSD using FFT of q's autocorrelation#########
+    # q_pred_test_auto = torch.zeros_like(q_pred_test.T)
+    # for i in range(0, q_pred_test_auto.size(0)):
+    #     q_pred_test_auto[i, :] = autocorrelation(q_pred_test.T[i, :])
+    # q_pred_test_fft = torch.fft.rfft(q_pred_test.T, n=config['model']['fft_n']).abs()  # FFT of q
+    # q_pred_test_fft = torch.fft.rfft(q_pred_test_auto, n=config['model']['fft_n']).abs()  # FFT of q's autocorrelation
+    # plt.figure()
+    # plt.plot(q_pred_test_auto[2, :].detach().numpy())
+    # calulate PSD using Scipy ########
+    frequencies, q_pred_test_fft = welch(q_pred_test.T.to('cpu').detach().numpy(),
+                             fs=200, nperseg=1024, nfft=config['model']['fft_n'])
+    q_pred_test_fft = torch.from_numpy(q_pred_test_fft)
+    # sort the results #######
+    _, q_pred_test_fft_max_indices = torch.max(q_pred_test_fft.T, dim=0)
+    q_pred_test_sorted_indices = torch.argsort(q_pred_test_fft_max_indices)
+    q_pred_test = q_pred_test[:, q_pred_test_sorted_indices] # sort q
+    phi_pred_test = phi_pred_test[:, q_pred_test_sorted_indices] # sort phi
+    q_pred_test_fft = q_pred_test_fft[q_pred_test_sorted_indices, :] # sort FFT.abs of q's autocorrelation
     
     acc_pred = phi_pred_test @ q_pred_test.T
     acc_true = graph_test[0].ndata['acc_Y']
@@ -90,9 +114,9 @@ for graph_test in dataloader_test:
         ax[i, 0].legend()
         
         frequencies, psd_pred = welch(acc_pred[dof_no[i], :].to('cpu').detach().numpy(),
-                                 fs=200, nperseg=256, nfft=config['model']['fft_n'])
+                                 fs=200, nperseg=1024, nfft=config['model']['fft_n'])
         frequencies, psd_true = welch(acc_true[dof_no[i], :].to('cpu').detach().numpy(),
-                                 fs=200, nperseg=256, nfft=config['model']['fft_n'])
+                                 fs=200, nperseg=1024, nfft=config['model']['fft_n'])
         ax[i, 1].plot(frequencies, psd_true, linestyle='--', label='True')
         ax[i, 1].plot(frequencies, psd_pred, label='Pred')
         ax[i, 1].set_xlabel('Frequency [Hz]', fontsize=14)
@@ -112,9 +136,8 @@ for graph_test in dataloader_test:
         ax[mode_no, 0].set_ylabel('Modal acc')
         ax[mode_no, 0].grid()
         
-        frequencies, psd = welch(q_pred_test[:, mode_no].to('cpu').detach().numpy(),
-                                 fs=200, nperseg=256, nfft=config['model']['fft_n'])
         # [f_n, zeta] = ModalId(frequencies, psd)
+        psd = q_pred_test_fft[mode_no, :].to('cpu').detach().numpy()
         ax[mode_no, 1].plot(frequencies, psd)
         # title_text = "component={:.0f}, f={:.3f}, zeta={:.5}".format(mode_no+1, f_n, zeta)
         # ax[mode_no, 1].set_title(title_text)

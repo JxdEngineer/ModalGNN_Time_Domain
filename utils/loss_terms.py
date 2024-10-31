@@ -1,7 +1,8 @@
 import torch
 import torch.nn as nn
 import dgl
-
+from utils.autocorrelation import autocorrelation
+from scipy.signal import welch
 
 # loss function using fft of modal responses
 def loss_terms(q_pred, phi_pred, graph, fft_n):
@@ -13,9 +14,21 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
     for i in range(len(graph_unbatched)):
         phi_index1 = phi_index2
         phi_index2 = phi_index1 + dgl.DGLGraph.number_of_nodes(graph_unbatched[i])
-        q_pred_unbatched = q_pred[i, :, :]
-        q_pred_unbatched_fft = torch.fft.rfft(q_pred_unbatched.T, n=fft_n).abs()
         phi_pred_unbatched = phi_pred[phi_index1:phi_index2]
+        
+        q_pred_unbatched = q_pred[i, :, :]
+        # use FFT of q to calculate loss 3 ######################
+        q_pred_unbatched_fft = torch.fft.rfft(q_pred_unbatched.T, n=fft_n).abs()
+        # use FFT of q's autocorrelation (PSD) to calculate loss 3 ######################
+        # q_pred_auto = torch.zeros_like(q_pred_unbatched.T)
+        # for mode_no in range(0, q_pred_auto.size(0)):
+        #     q_pred_auto[mode_no, :] = autocorrelation(q_pred_unbatched.T[mode_no, :])
+        # q_pred_unbatched_fft = torch.fft.rfft(q_pred_auto, n=fft_n).abs()  # FFT of q's autocorrelation
+        # use scipy.welch to calculate loss 3 ######################
+        # signal = q_pred_unbatched.T.cpu().detach().numpy()
+        # _, q_pred_unbatched_fft = welch(signal, fs=200, nperseg=1024, nfft=fft_n)
+        # q_pred_unbatched_fft = torch.from_numpy(q_pred_unbatched_fft).to(q_pred_unbatched.device)
+        # q_pred_unbatched_fft = q_pred_unbatched_fft.requires_grad_(q_pred_unbatched.requires_grad)
            
         # sort out phi from low-order modes to high-order modes, based on the complexity of mode shapes
         # node = graph_unbatched[i].ndata['node']

@@ -103,12 +103,7 @@ def train(config_path):
     scheduler = StepLR(optimizer, step_size=config['train']['step_size'], 
                        gamma=config['train']['gamma'])
         
-    # coefficients of different loss terms
-    c1 = 1
-    c2 = 1
-    c3 = 1
-    c4 = 0
-    # c5 = 0
+    
     
     # Path to log file
     log_file_path_train = config['model']['name'] + "_loss_train.txt"
@@ -122,6 +117,20 @@ def train(config_path):
     model.train()
     start_time = time.time()
     for epoch in range(config['train']['epochs']):
+        
+        if epoch < 2500:
+            # coefficients of different loss terms
+            c1 = 1
+            c2 = 1
+            c3 = 1
+            c4 = 0
+            # c5 = 0
+        else:
+            c1 = 1
+            c2 = 1
+            c3 = 1
+            c4 = 0   
+        
         # model validation ##################################
         epoch_loss_valid = 0
         for graph_valid in dataloader_valid:
@@ -164,14 +173,15 @@ def train(config_path):
             print('epoch: {}, loss_train: {:.10f}, loss_valid: {:.10f}' 
                   .format(epoch, epoch_loss_train, epoch_loss_valid))  
             
-        # log metrics to wandb #########################
-        # wandb.log({"loss_train": epoch_loss_train, "loss_valid": epoch_loss_valid})    
-        
+        # log metrics to wandb #########################  
         wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
                     "loss_valid": loss1_valid + loss2_valid + loss3_valid,
                     "loss1_valid": loss1_valid,
                     "loss2_valid": loss2_valid,
-                    "loss3_valid": loss3_valid})    
+                    "loss3_valid": loss3_valid,
+                    "loss1_train": loss1_train,
+                    "loss2_train": loss2_train,
+                    "loss3_train": loss3_train})    
     wandb.finish()
     
     train_time = (time.time() - start_time)

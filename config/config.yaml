@@ -1,6 +1,6 @@
 shared:
     mode_N: 7
-    time_L: 1000
+    time_L: 4000
     time_0: 1000
 
 model:
@@ -20,7 +20,7 @@ model:
     # name: "CFC"
     # name: "GatedGraphConv"
     dim: 64
-    fft_n: 512
+    fft_n: 1024
     dropout_rate: 0.1
     hid_layer: 0
     

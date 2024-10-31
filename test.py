@@ -46,8 +46,8 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array([2-1]) # sample from the training set
-# test_no = np.array([40-1]) # sample from the testing set
+# test_no = np.array([2-1]) # sample from the training set
+test_no = np.array([298-1]) # sample from the testing set
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -87,7 +87,7 @@ for graph_test in dataloader_test:
     # plt.plot(q_pred_test_auto[2, :].detach().numpy())
     # calulate PSD using Scipy ########
     frequencies, q_pred_test_fft = welch(q_pred_test.T.to('cpu').detach().numpy(),
-                             fs=200, nperseg=1024, nfft=config['model']['fft_n'])
+                             fs=200, nperseg=256, nfft=config['model']['fft_n'])
     q_pred_test_fft = torch.from_numpy(q_pred_test_fft)
     # sort the results #######
     _, q_pred_test_fft_max_indices = torch.max(q_pred_test_fft.T, dim=0)
@@ -114,9 +114,9 @@ for graph_test in dataloader_test:
         ax[i, 0].legend()
         
         frequencies, psd_pred = welch(acc_pred[dof_no[i], :].to('cpu').detach().numpy(),
-                                 fs=200, nperseg=1024, nfft=config['model']['fft_n'])
+                                 fs=200, nperseg=256, nfft=config['model']['fft_n'])
         frequencies, psd_true = welch(acc_true[dof_no[i], :].to('cpu').detach().numpy(),
-                                 fs=200, nperseg=1024, nfft=config['model']['fft_n'])
+                                 fs=200, nperseg=256, nfft=config['model']['fft_n'])
         ax[i, 1].plot(frequencies, psd_true, linestyle='--', label='True')
         ax[i, 1].plot(frequencies, psd_pred, label='Pred')
         ax[i, 1].set_xlabel('Frequency [Hz]', fontsize=14)

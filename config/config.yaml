@@ -1,7 +1,7 @@
 shared:
     mode_N: 7
-    time_L: 4000
-    time_0: 1000
+    time_L: 2000
+    time_0: 2000
 
 model:
     # name: "SAGE"

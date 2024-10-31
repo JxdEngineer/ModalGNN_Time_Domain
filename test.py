@@ -46,7 +46,7 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array([2-1]) # sample from the training set
+test_no = np.array([12-1]) # sample from the training set
 # test_no = np.array([298-1]) # sample from the testing set
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
@@ -149,13 +149,12 @@ for graph_test in dataloader_test:
             ax[mode_no, 1].plot([freq_test[i], freq_test[i]], [0, max(psd)], color='#FF1F5B')    
         
         phi_pred = phi_pred_test[:, mode_no].to('cpu').detach().numpy().squeeze()
-        # phi_pred = phi_pred / max(abs(phi_pred)) * 3
-        phi_pred = phi_pred * 3
+        phi_pred = phi_pred / max(abs(phi_pred)) * 2
         node_pred = np.zeros([len(node_test), 2])
         node_pred[:, 0] = node_test[:, 0]
         node_pred[:, 1] = node_test[:, 1] + phi_pred
         
-        phi_true = graph_test[0].ndata['phi_Y'][:, mode_no].detach().numpy().squeeze() * 3
+        phi_true = graph_test[0].ndata['phi_Y'][:, mode_no].detach().numpy().squeeze() * 2
         node_true = np.zeros([len(node_test), 2])
         node_true[:, 0] = node_test[:, 0]
         node_true[:, 1] = node_test[:, 1] + phi_true

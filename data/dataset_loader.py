@@ -209,5 +209,5 @@ def get_dataset(data_path, bs, graph_no, time_0, time_L, mode_N, device):
                  element, # edge features
                  freq, zeta)  # graph features
     dataloader_dataset = dgl.dataloading.GraphDataLoader(dataset, batch_size=bs,
-                                  drop_last=False, shuffle=True)
+                                  drop_last=False, shuffle=False)
     return dataloader_dataset

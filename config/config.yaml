@@ -33,7 +33,7 @@ data:
     bs: 64
     
 train:
-    learning_rate: 0.0005
-    epochs: 5000
+    learning_rate: 0.00005
+    epochs: 20000
     step_size: 100
     gamma: 1

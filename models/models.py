@@ -435,7 +435,7 @@ class Model_SAGE_1st(nn.Module):   # GraphSAGE, new architecture, GNN first, Tra
         q = self.graph_decoder(q)
         # node-level operation ##################################
         phi = self.node_decoder(node_spatial)
-        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        # phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         
         # sort out q from low-order modes to high-order modes, based on the dominant frequency
         # g_unbatched = dgl.unbatch(g)

@@ -1,0 +1,332 @@
+/cluster/home/xudjian/ModalGNN_Time_Domain/data/dataset_loader.py:190: UserWarning: Creating a tensor from a list of numpy.ndarrays is extremely slow. Please consider converting the list to a single numpy.ndarray with numpy.array() before converting to a tensor. (Triggered internally at ../torch/csrc/utils/tensor_new.cpp:261.)
+  self.freqs = torch.tensor(self.freqs, dtype = torch.float).to(self.device)
+wandb: Using wandb-core as the SDK backend. Please refer to https://wandb.me/wandb-core for more information.
+wandb: Currently logged in as: jxd-engineer. Use `wandb login --relogin` to force relogin
+wandb: Tracking run with wandb version 0.18.1
+wandb: Run data is saved locally in /cluster/home/xudjian/ModalGNN_Time_Domain/wandb/run-20241104_213130-pay5aays
+wandb: Run `wandb offline` to turn off syncing.
+wandb: Syncing run decent-capybara-159
+wandb: ⭐️ View project at https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain
+wandb: 🚀 View run at https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain/runs/pay5aays
+wandb: - 0.020 MB of 0.020 MB uploadedwandb:                                                                                
+wandb: 
+wandb: Run history:
+wandb: loss1_train ██▇▆▆▆▅▄▄▃▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▁▁▁▁▄▅▄▄▄▃▃▃▂▂
+wandb: loss1_valid ▃▂▂▂▁▁▁▁▁▁▂▂▂▂▂▂▂▂▃▂▃▃▄▄▄▄▅▆▆▅█▂▂▃▃▄▃▄▅▄
+wandb: loss2_train ▅▃▄▃▃▂▂▂▂▂▁▂▂▁▁▂▂▂▁▁▂▁▂▂▂▂▂▁▁▂▁▃▅█▂▃▂▂▁▃
+wandb: loss2_valid ▂▃▂▁▁▁▂▂▂▂▂▃▃▃▅▄▃▅▄▅▅█▅▄▅▅▆▆▆▇▁▂▂▁▂▂▂▂▂▁
+wandb: loss3_train █▅▁▁▂▃▄▃▃▃▃▄▄▄▂▂▂▂▂▃▁▂▃▃▂▂▂▃▃▄▂▂▂▄▇▂▁▂▂▂
+wandb: loss3_valid ▂▁▁▁▁▂▂▂▂▂▂▃▂▃▂▃▄▃▃▃▃▄▅▆▄▆▆▆█▇▄▃▁▁▁▁▂▂▂▂
+wandb:  loss_train ██▆▆▆▄▃▃▂▂▂▂▂▂▂▂▂▂▂▂▂▂▁▁▁▁▁▁▁▁▁▄▄▃▃▃▃▃▃▂
+wandb:  loss_valid ▂▂▄▄▄▄▃▂▂▂▂▂▂▂▂▃▃▃▃▄▄▄▄▅▅▅▅▅▅▇▆▇██▇▄▁▁▂▅
+wandb: 
+wandb: Run summary:
+wandb: loss1_train 0.00988
+wandb: loss1_valid 0.03763
+wandb: loss2_train 1e-05
+wandb: loss2_valid 3e-05
+wandb: loss3_train 2e-05
+wandb: loss3_valid 0.00012
+wandb:  loss_train 0.00991
+wandb:  loss_valid 0.03779
+wandb: 
+wandb: 🚀 View run decent-capybara-159 at: https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain/runs/pay5aays
+wandb: ⭐️ View project at: https://wandb.ai/jxd-engineer/ModalGNN_TimeDomain
+wandb: Synced 5 W&B file(s), 0 media file(s), 0 artifact file(s) and 0 other file(s)
+wandb: Find logs at: ./wandb/run-20241104_213130-pay5aays/logs
+Training device: cuda:0
+Create model: done
+graph_id = 0
+graph_id = 1
+graph_id = 2
+graph_id = 3
+graph_id = 4
+graph_id = 5
+graph_id = 6
+graph_id = 7
+graph_id = 8
+graph_id = 9
+graph_id = 10
+graph_id = 11
+graph_id = 12
+graph_id = 13
+graph_id = 14
+graph_id = 15
+graph_id = 16
+graph_id = 17
+graph_id = 18
+graph_id = 19
+graph_id = 20
+graph_id = 21
+graph_id = 22
+graph_id = 23
+graph_id = 24
+graph_id = 25
+graph_id = 26
+graph_id = 27
+graph_id = 28
+graph_id = 29
+graph_id = 30
+graph_id = 31
+Create training dataset: done
+graph_id = 32
+graph_id = 33
+graph_id = 34
+graph_id = 35
+graph_id = 36
+graph_id = 37
+graph_id = 38
+graph_id = 39
+Create validation dataset: done
+epoch: 19, loss_train: 0.0309598576, loss_valid: 0.0470367521
+epoch: 39, loss_train: 0.0290526915, loss_valid: 0.0390417278
+epoch: 59, loss_train: 0.0287727527, loss_valid: 0.0381026082
+epoch: 79, loss_train: 0.0285694301, loss_valid: 0.0380834900
+epoch: 99, loss_train: 0.0284390580, loss_valid: 0.0382111743
+epoch: 119, loss_train: 0.0282221865, loss_valid: 0.0379898660
+epoch: 139, loss_train: 0.0280349609, loss_valid: 0.0376901589
+epoch: 159, loss_train: 0.0278313272, loss_valid: 0.0379169770
+epoch: 179, loss_train: 0.0275711697, loss_valid: 0.0382092930
+epoch: 199, loss_train: 0.0271283146, loss_valid: 0.0379434302
+epoch: 219, loss_train: 0.0265611801, loss_valid: 0.0384135507
+epoch: 239, loss_train: 0.0259458032, loss_valid: 0.0381357893
+epoch: 259, loss_train: 0.0253329389, loss_valid: 0.0383434184
+epoch: 279, loss_train: 0.0247561913, loss_valid: 0.0385108888
+epoch: 299, loss_train: 0.0240486097, loss_valid: 0.0384979770
+epoch: 319, loss_train: 0.0236029569, loss_valid: 0.0384051315
+epoch: 339, loss_train: 0.0229982249, loss_valid: 0.0381663889
+epoch: 359, loss_train: 0.0223401953, loss_valid: 0.0380799286
+epoch: 379, loss_train: 0.0220331177, loss_valid: 0.0377588496
+epoch: 399, loss_train: 0.0214274377, loss_valid: 0.0380467698
+epoch: 419, loss_train: 0.0210801959, loss_valid: 0.0375963673
+epoch: 439, loss_train: 0.0205536541, loss_valid: 0.0377213247
+epoch: 459, loss_train: 0.0201193281, loss_valid: 0.0378804393
+epoch: 479, loss_train: 0.0197326522, loss_valid: 0.0381106697
+epoch: 499, loss_train: 0.0197101105, loss_valid: 0.0386643335
+epoch: 519, loss_train: 0.0192599297, loss_valid: 0.0377917998
+epoch: 539, loss_train: 0.0186941493, loss_valid: 0.0376871526
+epoch: 559, loss_train: 0.0184678808, loss_valid: 0.0375483185
+epoch: 579, loss_train: 0.0180850867, loss_valid: 0.0380444899
+epoch: 599, loss_train: 0.0176865458, loss_valid: 0.0378007516
+epoch: 619, loss_train: 0.0173527841, loss_valid: 0.0382810310
+epoch: 639, loss_train: 0.0171384495, loss_valid: 0.0383805148
+epoch: 659, loss_train: 0.0168198757, loss_valid: 0.0385248587
+epoch: 679, loss_train: 0.0164509173, loss_valid: 0.0382817462
+epoch: 699, loss_train: 0.0161341392, loss_valid: 0.0384723805
+epoch: 719, loss_train: 0.0158993043, loss_valid: 0.0389107615
+epoch: 739, loss_train: 0.0157032758, loss_valid: 0.0380509570
+epoch: 759, loss_train: 0.0154436240, loss_valid: 0.0377237499
+epoch: 779, loss_train: 0.0155456206, loss_valid: 0.0384335257
+epoch: 799, loss_train: 0.0150657389, loss_valid: 0.0385545492
+epoch: 819, loss_train: 0.0148865106, loss_valid: 0.0378341228
+epoch: 839, loss_train: 0.0144953346, loss_valid: 0.0383489430
+epoch: 859, loss_train: 0.0143108377, loss_valid: 0.0392847694
+epoch: 879, loss_train: 0.0143080354, loss_valid: 0.0388270393
+epoch: 899, loss_train: 0.0140060484, loss_valid: 0.0381816737
+epoch: 919, loss_train: 0.0140618151, loss_valid: 0.0384249799
+epoch: 939, loss_train: 0.0137451915, loss_valid: 0.0386184491
+epoch: 959, loss_train: 0.0135424640, loss_valid: 0.0394518189
+epoch: 979, loss_train: 0.0132895065, loss_valid: 0.0392052680
+epoch: 999, loss_train: 0.0133847874, loss_valid: 0.0388840958
+epoch: 1019, loss_train: 0.0131106284, loss_valid: 0.0396979563
+epoch: 1039, loss_train: 0.0129674133, loss_valid: 0.0386150554
+epoch: 1059, loss_train: 0.0126015572, loss_valid: 0.0391048901
+epoch: 1079, loss_train: 0.0123484982, loss_valid: 0.0389952213
+epoch: 1099, loss_train: 0.0124220625, loss_valid: 0.0390747339
+epoch: 1119, loss_train: 0.0121704619, loss_valid: 0.0393257290
+epoch: 1139, loss_train: 0.0121383974, loss_valid: 0.0386453830
+epoch: 1159, loss_train: 0.0118548917, loss_valid: 0.0385528095
+epoch: 1179, loss_train: 0.0116789294, loss_valid: 0.0387096480
+epoch: 1199, loss_train: 0.0114984382, loss_valid: 0.0386342481
+epoch: 1219, loss_train: 0.0112281330, loss_valid: 0.0399176143
+epoch: 1239, loss_train: 0.0112821199, loss_valid: 0.0397914238
+epoch: 1259, loss_train: 0.0109981634, loss_valid: 0.0392972045
+epoch: 1279, loss_train: 0.0109196967, loss_valid: 0.0388942249
+epoch: 1299, loss_train: 0.0109328786, loss_valid: 0.0397510380
+epoch: 1319, loss_train: 0.0107470611, loss_valid: 0.0388591401
+epoch: 1339, loss_train: 0.0105477916, loss_valid: 0.0395503081
+epoch: 1359, loss_train: 0.0106123993, loss_valid: 0.0401150510
+epoch: 1379, loss_train: 0.0104917614, loss_valid: 0.0392521210
+epoch: 1399, loss_train: 0.0102199903, loss_valid: 0.0397360735
+epoch: 1419, loss_train: 0.0101284655, loss_valid: 0.0394245684
+epoch: 1439, loss_train: 0.0101101138, loss_valid: 0.0393177494
+epoch: 1459, loss_train: 0.0098373219, loss_valid: 0.0401908644
+epoch: 1479, loss_train: 0.0098248105, loss_valid: 0.0424548723
+epoch: 1499, loss_train: 0.0099500185, loss_valid: 0.0400231183
+epoch: 1519, loss_train: 0.0097241756, loss_valid: 0.0404113308
+epoch: 1539, loss_train: 0.0096014002, loss_valid: 0.0404380299
+epoch: 1559, loss_train: 0.0096510760, loss_valid: 0.0395623632
+epoch: 1579, loss_train: 0.0094718374, loss_valid: 0.0401264578
+epoch: 1599, loss_train: 0.0096830912, loss_valid: 0.0408551805
+epoch: 1619, loss_train: 0.0093442807, loss_valid: 0.0399611816
+epoch: 1639, loss_train: 0.0093091624, loss_valid: 0.0401622280
+epoch: 1659, loss_train: 0.0092071444, loss_valid: 0.0400391743
+epoch: 1679, loss_train: 0.0091840737, loss_valid: 0.0397159271
+epoch: 1699, loss_train: 0.0091206105, loss_valid: 0.0401594117
+epoch: 1719, loss_train: 0.0090511916, loss_valid: 0.0407610312
+epoch: 1739, loss_train: 0.0089432113, loss_valid: 0.0400486439
+epoch: 1759, loss_train: 0.0088262912, loss_valid: 0.0409412161
+epoch: 1779, loss_train: 0.0088098506, loss_valid: 0.0404702686
+epoch: 1799, loss_train: 0.0087399287, loss_valid: 0.0401971638
+epoch: 1819, loss_train: 0.0087513095, loss_valid: 0.0409239009
+epoch: 1839, loss_train: 0.0086367382, loss_valid: 0.0402544886
+epoch: 1859, loss_train: 0.0086887032, loss_valid: 0.0407095850
+epoch: 1879, loss_train: 0.0086375754, loss_valid: 0.0408095047
+epoch: 1899, loss_train: 0.0086172186, loss_valid: 0.0403572060
+epoch: 1919, loss_train: 0.0085139163, loss_valid: 0.0397678353
+epoch: 1939, loss_train: 0.0083899396, loss_valid: 0.0407683514
+epoch: 1959, loss_train: 0.0082445191, loss_valid: 0.0405056328
+epoch: 1979, loss_train: 0.0082637072, loss_valid: 0.0406784415
+epoch: 1999, loss_train: 0.0081846779, loss_valid: 0.0415962264
+epoch: 2019, loss_train: 0.0080312099, loss_valid: 0.0405294709
+epoch: 2039, loss_train: 0.0081241233, loss_valid: 0.0415595733
+epoch: 2059, loss_train: 0.0079868939, loss_valid: 0.0409272835
+epoch: 2079, loss_train: 0.0080649760, loss_valid: 0.0411076099
+epoch: 2099, loss_train: 0.0083889458, loss_valid: 0.0410769805
+epoch: 2119, loss_train: 0.0081156259, loss_valid: 0.0399184972
+epoch: 2139, loss_train: 0.0079503907, loss_valid: 0.0397913717
+epoch: 2159, loss_train: 0.0077538071, loss_valid: 0.0413610972
+epoch: 2179, loss_train: 0.0078942738, loss_valid: 0.0408137776
+epoch: 2199, loss_train: 0.0082499469, loss_valid: 0.0420837849
+epoch: 2219, loss_train: 0.0082253376, loss_valid: 0.0405507237
+epoch: 2239, loss_train: 0.0079509383, loss_valid: 0.0398213081
+epoch: 2259, loss_train: 0.0079081338, loss_valid: 0.0419321172
+epoch: 2279, loss_train: 0.0077121900, loss_valid: 0.0428842194
+epoch: 2299, loss_train: 0.0075616972, loss_valid: 0.0418613367
+epoch: 2319, loss_train: 0.0075015565, loss_valid: 0.0416859090
+epoch: 2339, loss_train: 0.0073431963, loss_valid: 0.0416821614
+epoch: 2359, loss_train: 0.0073528998, loss_valid: 0.0411845706
+epoch: 2379, loss_train: 0.0074408134, loss_valid: 0.0427103341
+epoch: 2399, loss_train: 0.0074558323, loss_valid: 0.0426614992
+epoch: 2419, loss_train: 0.0075149746, loss_valid: 0.0409881324
+epoch: 2439, loss_train: 0.0075712032, loss_valid: 0.0418205634
+epoch: 2459, loss_train: 0.0073396815, loss_valid: 0.0419142917
+epoch: 2479, loss_train: 0.0072517949, loss_valid: 0.0415566824
+epoch: 2499, loss_train: 0.0072904457, loss_valid: 0.0408571549
+epoch: 2519, loss_train: 0.0074547739, loss_valid: 0.0408064015
+epoch: 2539, loss_train: 0.0075669335, loss_valid: 0.0425313227
+epoch: 2559, loss_train: 0.0078440951, loss_valid: 0.0412136652
+epoch: 2579, loss_train: 0.0077707372, loss_valid: 0.0427940413
+epoch: 2599, loss_train: 0.0075661382, loss_valid: 0.0410304144
+epoch: 2619, loss_train: 0.0072439010, loss_valid: 0.0424285568
+epoch: 2639, loss_train: 0.0072691957, loss_valid: 0.0422541723
+epoch: 2659, loss_train: 0.0070858975, loss_valid: 0.0418271348
+epoch: 2679, loss_train: 0.0069217435, loss_valid: 0.0428444557
+epoch: 2699, loss_train: 0.0068487986, loss_valid: 0.0431751050
+epoch: 2719, loss_train: 0.0069319382, loss_valid: 0.0433197096
+epoch: 2739, loss_train: 0.0068006436, loss_valid: 0.0431540906
+epoch: 2759, loss_train: 0.0067488789, loss_valid: 0.0429111645
+epoch: 2779, loss_train: 0.0067601316, loss_valid: 0.0434537828
+epoch: 2799, loss_train: 0.0069818464, loss_valid: 0.0426233262
+epoch: 2819, loss_train: 0.0069635110, loss_valid: 0.0418729447
+epoch: 2839, loss_train: 0.0068209479, loss_valid: 0.0437667593
+epoch: 2859, loss_train: 0.0066432897, loss_valid: 0.0427035540
+epoch: 2879, loss_train: 0.0066249599, loss_valid: 0.0428495295
+epoch: 2899, loss_train: 0.0065675043, loss_valid: 0.0442800671
+epoch: 2919, loss_train: 0.0066538826, loss_valid: 0.0435747914
+epoch: 2939, loss_train: 0.0066702319, loss_valid: 0.0441247113
+epoch: 2959, loss_train: 0.0067792870, loss_valid: 0.0460211858
+epoch: 2979, loss_train: 0.0067891357, loss_valid: 0.0450869240
+epoch: 2999, loss_train: 0.0065551177, loss_valid: 0.0449235514
+epoch: 3019, loss_train: 0.0066676121, loss_valid: 0.0455833934
+epoch: 3039, loss_train: 0.0067172623, loss_valid: 0.0439487658
+epoch: 3059, loss_train: 0.0066985241, loss_valid: 0.0422674045
+epoch: 3079, loss_train: 0.0067277104, loss_valid: 0.0428630523
+epoch: 3099, loss_train: 0.0068118856, loss_valid: 0.0439007282
+epoch: 3119, loss_train: 0.0071374527, loss_valid: 0.0419564843
+epoch: 3139, loss_train: 0.0069780252, loss_valid: 0.0438637286
+epoch: 3159, loss_train: 0.0067890552, loss_valid: 0.0440724753
+epoch: 3179, loss_train: 0.0065646265, loss_valid: 0.0453104824
+epoch: 3199, loss_train: 0.0065187430, loss_valid: 0.0459406748
+epoch: 3219, loss_train: 0.0069041080, loss_valid: 0.0436864644
+epoch: 3239, loss_train: 0.0067311772, loss_valid: 0.0442729518
+epoch: 3259, loss_train: 0.0066945134, loss_valid: 0.0435749702
+epoch: 3279, loss_train: 0.0064393673, loss_valid: 0.0454507880
+epoch: 3299, loss_train: 0.0064131590, loss_valid: 0.0443320498
+epoch: 3319, loss_train: 0.0064973733, loss_valid: 0.0455916561
+epoch: 3339, loss_train: 0.0065622353, loss_valid: 0.0436489955
+epoch: 3359, loss_train: 0.0066499771, loss_valid: 0.0444280654
+epoch: 3379, loss_train: 0.0064432090, loss_valid: 0.0448415428
+epoch: 3399, loss_train: 0.0064060157, loss_valid: 0.0455574356
+epoch: 3419, loss_train: 0.0062994673, loss_valid: 0.0469157472
+epoch: 3439, loss_train: 0.0062083476, loss_valid: 0.0448364131
+epoch: 3459, loss_train: 0.0061102295, loss_valid: 0.0458945259
+epoch: 3479, loss_train: 0.0061430992, loss_valid: 0.0454327799
+epoch: 3499, loss_train: 0.0061373347, loss_valid: 0.0464533083
+epoch: 3519, loss_train: 0.0060547641, loss_valid: 0.0468120500
+epoch: 3539, loss_train: 0.0061034062, loss_valid: 0.0468042567
+epoch: 3559, loss_train: 0.0060848705, loss_valid: 0.0453317799
+epoch: 3579, loss_train: 0.0060978709, loss_valid: 0.0475927107
+epoch: 3599, loss_train: 0.0060519027, loss_valid: 0.0458590984
+epoch: 3619, loss_train: 0.0060230223, loss_valid: 0.0454016142
+epoch: 3639, loss_train: 0.0061443481, loss_valid: 0.0450553074
+epoch: 3659, loss_train: 0.0062171528, loss_valid: 0.0472854860
+epoch: 3679, loss_train: 0.0061065294, loss_valid: 0.0466846749
+epoch: 3699, loss_train: 0.0062049162, loss_valid: 0.0478396975
+epoch: 3719, loss_train: 0.0061764414, loss_valid: 0.0455675609
+epoch: 3739, loss_train: 0.0059742485, loss_valid: 0.0456679463
+epoch: 3759, loss_train: 0.0060568182, loss_valid: 0.0470334925
+epoch: 3779, loss_train: 0.0070005436, loss_valid: 0.0438229218
+epoch: 3799, loss_train: 0.0065255738, loss_valid: 0.0444279090
+epoch: 3819, loss_train: 0.0066194586, loss_valid: 0.0441260040
+epoch: 3839, loss_train: 0.0065891654, loss_valid: 0.0444069803
+epoch: 3859, loss_train: 0.0066203251, loss_valid: 0.0444959290
+epoch: 3879, loss_train: 0.0073971683, loss_valid: 0.0470439196
+epoch: 3899, loss_train: 0.0073701246, loss_valid: 0.0451804586
+epoch: 3919, loss_train: 0.0080547566, loss_valid: 0.0460911244
+epoch: 3939, loss_train: 0.0100884000, loss_valid: 0.0440994650
+epoch: 3959, loss_train: 0.0134032890, loss_valid: 0.0443410203
+epoch: 3979, loss_train: 0.0212731715, loss_valid: 0.0396750942
+epoch: 3999, loss_train: 0.0223865081, loss_valid: 0.0378517918
+epoch: 4019, loss_train: 0.0210039020, loss_valid: 0.0376385450
+epoch: 4039, loss_train: 0.0195556693, loss_valid: 0.0373841673
+epoch: 4059, loss_train: 0.0202326924, loss_valid: 0.0388535857
+epoch: 4079, loss_train: 0.0176613703, loss_valid: 0.0384415612
+epoch: 4099, loss_train: 0.0173258539, loss_valid: 0.0377444141
+epoch: 4119, loss_train: 0.0182024818, loss_valid: 0.0381396003
+epoch: 4139, loss_train: 0.0166909602, loss_valid: 0.0385741740
+epoch: 4159, loss_train: 0.0165082812, loss_valid: 0.0371122994
+epoch: 4179, loss_train: 0.0159554314, loss_valid: 0.0372270569
+epoch: 4199, loss_train: 0.0155886393, loss_valid: 0.0371097624
+epoch: 4219, loss_train: 0.0154384142, loss_valid: 0.0371613465
+epoch: 4239, loss_train: 0.0149139408, loss_valid: 0.0368685201
+epoch: 4259, loss_train: 0.0144160427, loss_valid: 0.0366663262
+epoch: 4279, loss_train: 0.0142906932, loss_valid: 0.0369069241
+epoch: 4299, loss_train: 0.0136901420, loss_valid: 0.0370169133
+epoch: 4319, loss_train: 0.0134605318, loss_valid: 0.0377222896
+epoch: 4339, loss_train: 0.0133624012, loss_valid: 0.0366954617
+epoch: 4359, loss_train: 0.0131830238, loss_valid: 0.0367883369
+epoch: 4379, loss_train: 0.0129183223, loss_valid: 0.0386384167
+epoch: 4399, loss_train: 0.0130397137, loss_valid: 0.0377676114
+epoch: 4419, loss_train: 0.0129360259, loss_valid: 0.0369175822
+epoch: 4439, loss_train: 0.0135062914, loss_valid: 0.0369059741
+epoch: 4459, loss_train: 0.0134061314, loss_valid: 0.0376540534
+epoch: 4479, loss_train: 0.0128821870, loss_valid: 0.0384160019
+epoch: 4499, loss_train: 0.0124925748, loss_valid: 0.0386934243
+epoch: 4519, loss_train: 0.0124827791, loss_valid: 0.0383155681
+epoch: 4539, loss_train: 0.0123526081, loss_valid: 0.0379281677
+epoch: 4559, loss_train: 0.0119955018, loss_valid: 0.0391156934
+epoch: 4579, loss_train: 0.0119176786, loss_valid: 0.0390720256
+epoch: 4599, loss_train: 0.0118735684, loss_valid: 0.0376691334
+epoch: 4619, loss_train: 0.0115509573, loss_valid: 0.0387319438
+epoch: 4639, loss_train: 0.0116638904, loss_valid: 0.0383901708
+epoch: 4659, loss_train: 0.0113898385, loss_valid: 0.0385878496
+epoch: 4679, loss_train: 0.0113236075, loss_valid: 0.0387704782
+epoch: 4699, loss_train: 0.0111490600, loss_valid: 0.0386921987
+epoch: 4719, loss_train: 0.0110876290, loss_valid: 0.0388325155
+epoch: 4739, loss_train: 0.0109934956, loss_valid: 0.0382644087
+epoch: 4759, loss_train: 0.0109878033, loss_valid: 0.0382171795
+epoch: 4779, loss_train: 0.0109145558, loss_valid: 0.0387530364
+epoch: 4799, loss_train: 0.0106687313, loss_valid: 0.0387196504
+epoch: 4819, loss_train: 0.0105748074, loss_valid: 0.0393919311
+epoch: 4839, loss_train: 0.0106203137, loss_valid: 0.0385364555
+epoch: 4859, loss_train: 0.0106965536, loss_valid: 0.0387586057
+epoch: 4879, loss_train: 0.0104244733, loss_valid: 0.0397322774
+epoch: 4899, loss_train: 0.0103552267, loss_valid: 0.0391706005
+epoch: 4919, loss_train: 0.0103836348, loss_valid: 0.0388870984
+epoch: 4939, loss_train: 0.0104688182, loss_valid: 0.0382154919
+epoch: 4959, loss_train: 0.0101045603, loss_valid: 0.0391873084
+epoch: 4979, loss_train: 0.0100906836, loss_valid: 0.0388600156
+epoch: 4999, loss_train: 0.0101994332, loss_valid: 0.0391868651
+Train the model: done, 832.4937603473663 seconds
+Save trained model: done

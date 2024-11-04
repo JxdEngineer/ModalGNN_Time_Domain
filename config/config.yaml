@@ -22,7 +22,7 @@ model:
     # name: "STGNN"
     dim: 64
     fft_n: 1024
-    dropout_rate: 0.1
+    dropout_rate: 0.3
     hid_layer: 0
     
 data:

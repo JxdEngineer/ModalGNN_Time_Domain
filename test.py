@@ -29,8 +29,8 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-# test_no = np.array([4-1]) # sample from the training set, 24 is for APWSHM paper
-test_no = np.array([97-1]) # sample from the testing set, 47 is for APWSHM paper
+# test_no = np.array([24-1]) # sample from the training set, 24 is for APWSHM paper
+test_no = np.array([47-1]) # sample from the testing set, 47 is for APWSHM paper
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 

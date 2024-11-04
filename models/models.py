@@ -278,12 +278,12 @@ class Model_SAGE(nn.Module):   # GraphSAGE, use cat(FFT.abs, FFT.angle) as node 
         super().__init__()
         # use built-in Transformer ##################################
         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2)
+                                                    d_head=4, d_ff=128,
+                                                    n_layers=2, dropout=dropout_rate)
         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
-                                                    d_head=4, d_ff=256,
+                                                    d_head=4, d_ff=128,
                                                     n_layers=2,
-                                                    k=mode_N)       
+                                                    k=mode_N, dropout=dropout_rate)       
         self.GNN = SAGE(fft_n+2, dim, dim, dropout_rate, hid_layer)
         self.node_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
         self.time_L = time_L
@@ -411,12 +411,15 @@ class Model_SAGE_1st(nn.Module):   # GraphSAGE, new architecture, GNN first, Tra
         super().__init__()
         # use built-in Transformer ##################################
         self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
-                                                    d_head=4, d_ff=256,
-                                                    n_layers=2)
+                                                    d_head=4, d_ff=128,
+                                                    n_layers=2, 
+                                                    dropouth=dropout_rate)
         self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
-                                                    d_head=4, d_ff=256,
+                                                    d_head=4, d_ff=128,
                                                     n_layers=2,
-                                                    k=mode_N)
+                                                    k=dim, 
+                                                    dropouth=dropout_rate)    
+        self.graph_decoder = MLP(dim, dim, mode_N, dropout_rate, hid_layer)
         self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
         self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
         self.time_L = time_L
@@ -428,10 +431,11 @@ class Model_SAGE_1st(nn.Module):   # GraphSAGE, new architecture, GNN first, Tra
         graph_spatial = self.pooling1(g, node_spatial)
         graph_spatial = self.pooling2(g, graph_spatial)
         [B, LK] = graph_spatial.size()
-        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))    
+        q = graph_spatial.view(B, self.time_L, int(LK/self.time_L))  
+        q = self.graph_decoder(q)
         # node-level operation ##################################
         phi = self.node_decoder(node_spatial)
-        # phi = phi / torch.max(torch.abs(phi), dim=0)[0]
+        phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         
         # sort out q from low-order modes to high-order modes, based on the dominant frequency
         # g_unbatched = dgl.unbatch(g)
@@ -1092,6 +1096,36 @@ class Model_GatedGraphConv(nn.Module):   # GraphSAGE
         phi = phi / torch.max(torch.abs(phi), dim=0)[0]
         return q, phi # return mode responses and mode shapes
 
+class Model_STGNN(nn.Module):   # GraphSAGE, new architecture, GNN first, Transformer readout next
+    def __init__(self, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
+        super().__init__()
+        # use built-in Transformer ##################################
+        self.pooling1 = dglnn.SetTransformerEncoder(time_L, n_heads=4, 
+                                                    d_head=4, d_ff=128,
+                                                    n_layers=2, 
+                                                    dropouth=dropout_rate)
+        self.pooling2 = dglnn.SetTransformerDecoder(time_L, num_heads=4, 
+                                                    d_head=4, d_ff=128,
+                                                    n_layers=2,
+                                                    k=1, 
+                                                    dropouth=dropout_rate)    
+        self.global_decoder = MLP(1, dim, mode_N, dropout_rate, hid_layer)
+        self.GNN = SAGE(time_L, dim, time_L, dropout_rate, hid_layer)
+        self.node_decoder = MLP(time_L, dim, mode_N, dropout_rate, hid_layer)
+        self.time_L = time_L
+        self.fft_n = fft_n
+    def forward(self, g):
+        node_in = g.ndata['acc_Y']
+        node_spatial = self.GNN(g, node_in)
+        # graph-level operation ##################################
+        graph_spatial = self.pooling1(g, node_spatial)
+        graph_spatial = self.pooling2(g, graph_spatial)
+        graph_spatial = graph_spatial.unsqueeze(dim=2)
+        q = self.global_decoder(graph_spatial)
+        # node-level operation ##################################
+        phi = self.node_decoder(node_spatial)
+        return q, phi # return mode responses and mode shapes
+
 def create_model(model_name, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer):
     if model_name == 'SAGE':
         return Model_SAGE(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
@@ -1125,5 +1159,7 @@ def create_model(model_name, dim, time_L, fft_n, mode_N, dropout_rate, hid_layer
         return Model_SAGE_LSTM_encoder(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     elif model_name == 'SAGE_two':
         return Model_SAGE_two(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
+    elif model_name == 'STGNN':
+        return Model_STGNN(dim, time_L, fft_n, mode_N, dropout_rate, hid_layer)
     else:
         raise ValueError(f"Model {model_name} not recognized.")

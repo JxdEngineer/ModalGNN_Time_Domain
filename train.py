@@ -104,7 +104,6 @@ def train(config_path):
                        gamma=config['train']['gamma'])
         
     
-    
     # Path to log file
     log_file_path_train = config['model']['name'] + "_loss_train.txt"
     with open(log_file_path_train, 'w') as f:
@@ -121,15 +120,15 @@ def train(config_path):
         if epoch < 2500:
             # coefficients of different loss terms
             c1 = 1
-            c2 = 1
-            c3 = 1
+            c2 = 10
+            c3 = 10
             c4 = 0
             # c5 = 0
         else:
             c1 = 1
-            c2 = 1
-            c3 = 1
-            c4 = 0   
+            c2 = 10
+            c3 = 10
+            c4 = 0
         
         # model validation ##################################
         epoch_loss_valid = 0
@@ -169,7 +168,7 @@ def train(config_path):
         optimizer.step()
         scheduler.step()
 
-        if epoch % 20 == 0:
+        if (epoch + 1) % 20 == 0:
             print('epoch: {}, loss_train: {:.10f}, loss_valid: {:.10f}' 
                   .format(epoch, epoch_loss_train, epoch_loss_valid))  
             

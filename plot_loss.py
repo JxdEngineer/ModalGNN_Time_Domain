@@ -29,17 +29,16 @@ time_valid = df_loss_valid['time'].values
 # %% plot results
 plt.close('all')
 # plot log loss curve
-plt.figure()
+plt.figure(constrained_layout=True)
 plt.semilogy(loss_train_meter, label='train loss: '+f"{loss_train_meter[-1]:.6f}")
 plt.semilogy(loss_valid_meter, label='valid loss: '+f"{loss_valid_meter[-1]:.6f}")
-plt.ylabel('MSE loss', fontsize=14)
+plt.ylabel('log(loss)', fontsize=14)
 plt.xlabel('Epoch', fontsize=14)
-title_text = "Time={:.3f}".format(time_train[-1])
+title_text = "Total loss, Training Time={:.3f}".format(time_train[-1])
 # plt.ylim([0.001, 10])
 plt.title(title_text)
 plt.grid()
 plt.legend()
-plt.tight_layout()
 plt.show()
 
 fig, ax = plt.subplots(1, 2, layout="constrained")

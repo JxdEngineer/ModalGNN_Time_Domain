@@ -19,6 +19,7 @@ model:
     # name: "EdgeGAT"
     # name: "CFC"
     # name: "GatedGraphConv"
+    # name: "STGNN"
     dim: 64
     fft_n: 1024
     dropout_rate: 0.1
@@ -33,7 +34,7 @@ data:
     bs: 64
     
 train:
-    learning_rate: 0.00005
-    epochs: 20000
+    learning_rate: 0.0005
+    epochs: 5000
     step_size: 100
     gamma: 1

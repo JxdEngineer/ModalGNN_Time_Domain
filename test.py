@@ -8,7 +8,8 @@ from scipy.signal import welch
 
 from models.models import create_model
 from data.dataset_loader import get_dataset
-# from utils.autocorrelation import autocorrelation
+from utils.match_mode import MAC
+from utils.match_mode import match_mode
 import yaml
 
 # Load config
@@ -29,8 +30,8 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-# test_no = np.array([24-1]) # sample from the training set, 24 is for APWSHM paper
-test_no = np.array([47-1]) # sample from the testing set, 47 is for APWSHM paper
+test_no = np.array([1-1]) # sample from the training set, 24 is for APWSHM paper
+# test_no = np.array([47-1]) # sample from the testing set, 47 is for APWSHM paper
 dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
@@ -39,14 +40,6 @@ dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpas
                         mode_N=config['shared']['mode_N'],
                         device='cpu')
 print('Create dataset: done')
-
-def MAC(x, y):
-    assert x.shape == y.shape, "Mode shapes must have the same shape"
-    numerator = np.abs(np.dot(x, y.T))**2
-    denominator_x = np.dot(x, x.T)
-    denominator_y = np.dot(y, y.T)
-    mac = numerator / (denominator_x * denominator_y)
-    return mac
 # %% plot test results
 # plt.close('all')
 # count = 0
@@ -242,11 +235,6 @@ for graph_test in dataloader_test:
     freq_pred = frequencies[q_pred_test_fft_max_indices]
     # record true frequencies
     freq_true = graph_test[1].squeeze().numpy()
-    
-    # calculate MAC
-    phi_pred = phi_pred_test.detach().numpy()
-    phi_true = graph_test[0].ndata['phi_Y'].detach().numpy()
-    MAC(phi_true[:,3], phi_pred[:,4])
 
     # plot acc time series and PSD #########################################
     dof_no = np.array([20, 25, 30, 35, 40]) - 1  
@@ -343,3 +331,12 @@ for graph_test in dataloader_test:
         
         count = count + 1 
 
+# calculate metrics to evaluate modal identification accuracy
+phi_true = graph_test[0].ndata['phi_Y'].detach().numpy().squeeze()
+phi_pred = phi_pred_test.detach().numpy().squeeze()
+
+freq_pred_match, MAC_pred_match = match_mode(freq_true, freq_pred, phi_true, phi_pred)
+
+print(freq_true)
+print(freq_pred_match)
+print(MAC_pred_match)

@@ -12,6 +12,9 @@ from utils.match_mode import MAC
 from utils.match_mode import match_mode
 import yaml
 
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 # Load config
 with open('config/config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -30,9 +33,9 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array([1-1]) # sample from the training set, 24 is for APWSHM paper
+test_no = np.array([24-1]) # sample from the training set, 24 is for APWSHM paper
 # test_no = np.array([47-1]) # sample from the testing set, 47 is for APWSHM paper
-dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
+dataloader_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
                         bs=config['data']['bs'], 
                         graph_no=test_no, 
                         time_0=config['shared']['time_0'], 
@@ -337,6 +340,9 @@ phi_pred = phi_pred_test.detach().numpy().squeeze()
 
 freq_pred_match, MAC_pred_match = match_mode(freq_true, freq_pred, phi_true, phi_pred)
 
+print("freq_true")
 print(freq_true)
+print("freq_pred_match")
 print(freq_pred_match)
+print("MAC_pred_match")
 print(MAC_pred_match)

@@ -12,6 +12,9 @@ from utils.match_mode import MAC
 from utils.match_mode import match_mode
 import yaml
 
+import os
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
 # Load config
 with open('config/config.yaml', 'r') as f:
     config = yaml.safe_load(f)
@@ -30,9 +33,9 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array(range(32)) # sample from the training set
-# test_no = np.array(range(40, 50)) # sample from the testing set
-dataloader_test = get_dataset(data_path="C:/Users/14360/Desktop/truss_500_lowpass.mat", 
+# test_no = np.array(range(32)) # sample from the training set
+test_no = np.array(range(32, 50)) # sample from the testing set
+dataloader_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
                         bs=1, 
                         graph_no=test_no, 
                         time_0=config['shared']['time_0'], 

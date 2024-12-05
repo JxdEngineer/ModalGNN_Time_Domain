@@ -71,26 +71,26 @@ def train(config_path):
     print('Create validation dataset: done')
     
     # start a new wandb run to track the training process #####################
-    wandb.init(
-        # set the wandb project where this run will be logged
-        project="ModalGNN_TimeDomain",
-        # track hyperparameters and run metadata
-        config={
-            "mode_N": config['shared']['mode_N'],
-            "time_L": config['shared']['time_L'],
-            "time_0": config['shared']['time_0'],
-            "model_dim": config['model']['dim'],
-            "fft_n": config['model']['fft_n'],
-            "dropout_rate": config['model']['dropout_rate'],
-            "hid_layer": config['model']['hid_layer'],
-            "batch_size": config['data']['bs'],     
-            "learning_rate": config['train']['learning_rate'],
-            "step_size": config['train']['step_size'],
-            "gamma": config['train']['gamma'],
-            "train_N": len(train_no),
-            "model_name": config['model']['name']
-        }
-    )
+    # wandb.init(
+    #     # set the wandb project where this run will be logged
+    #     project="ModalGNN_TimeDomain",
+    #     # track hyperparameters and run metadata
+    #     config={
+    #         "mode_N": config['shared']['mode_N'],
+    #         "time_L": config['shared']['time_L'],
+    #         "time_0": config['shared']['time_0'],
+    #         "model_dim": config['model']['dim'],
+    #         "fft_n": config['model']['fft_n'],
+    #         "dropout_rate": config['model']['dropout_rate'],
+    #         "hid_layer": config['model']['hid_layer'],
+    #         "batch_size": config['data']['bs'],     
+    #         "learning_rate": config['train']['learning_rate'],
+    #         "step_size": config['train']['step_size'],
+    #         "gamma": config['train']['gamma'],
+    #         "train_N": len(train_no),
+    #         "model_name": config['model']['name']
+    #     }
+    # )
     
     # update W&B config
     # api = wandb.Api()
@@ -173,15 +173,15 @@ def train(config_path):
                   .format(epoch, epoch_loss_train, epoch_loss_valid))  
             
         # log metrics to wandb #########################  
-        wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
-                    "loss_valid": loss1_valid + loss2_valid + loss3_valid,
-                    "loss1_valid": loss1_valid,
-                    "loss2_valid": loss2_valid,
-                    "loss3_valid": loss3_valid,
-                    "loss1_train": loss1_train,
-                    "loss2_train": loss2_train,
-                    "loss3_train": loss3_train})    
-    wandb.finish()
+    #     wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
+    #                 "loss_valid": loss1_valid + loss2_valid + loss3_valid,
+    #                 "loss1_valid": loss1_valid,
+    #                 "loss2_valid": loss2_valid,
+    #                 "loss3_valid": loss3_valid,
+    #                 "loss1_train": loss1_train,
+    #                 "loss2_train": loss2_train,
+    #                 "loss3_train": loss3_train})    
+    # wandb.finish()
     
     train_time = (time.time() - start_time)
     print("Train the model: done, %s seconds" % train_time)

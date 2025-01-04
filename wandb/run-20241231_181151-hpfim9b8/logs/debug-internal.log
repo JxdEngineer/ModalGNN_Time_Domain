@@ -1,0 +1,18 @@
+{"time":"2024-12-31T18:11:51.8705179+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-31T18:11:51.8705179+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241231_181151-hpfim9b8\\logs\\debug-core.log"}
+{"time":"2024-12-31T18:11:51.9808573+08:00","level":"INFO","msg":"created new stream","id":"hpfim9b8"}
+{"time":"2024-12-31T18:11:51.9813605+08:00","level":"INFO","msg":"handler: started","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:11:51.9813605+08:00","level":"INFO","msg":"sender: started","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:11:51.9813605+08:00","level":"INFO","msg":"stream: started","id":"hpfim9b8"}
+{"time":"2024-12-31T18:11:51.9813605+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:11:52.4083208+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-31T18:24:15.1619157+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/jxd-engineer/ModalGNN_TimeDomain/hpfim9b8/file_stream\": dial tcp 35.186.228.49:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond."}
+{"time":"2024-12-31T18:25:35.2589553+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-31T18:25:35.259472+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-31T18:25:36.2637092+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading wandb-summary.json","runtime_seconds":0.4931211,"progress":"380B/380B"},{"desc":"uploading config.yaml","runtime_seconds":0.2711911,"progress":"873B/873B"},{"desc":"uploading output.log","runtime_seconds":0.2711911,"progress":"125.9KB/125.9KB"}],"total_operations":3}}
+{"time":"2024-12-31T18:25:37.729539+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-31T18:25:39.4823038+08:00","level":"INFO","msg":"stream: closing","id":"hpfim9b8"}
+{"time":"2024-12-31T18:25:39.4823038+08:00","level":"INFO","msg":"handler: closed","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:25:39.4823038+08:00","level":"INFO","msg":"sender: closed","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:25:39.4823038+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"hpfim9b8"}
+{"time":"2024-12-31T18:25:39.4823038+08:00","level":"INFO","msg":"stream: closed","id":"hpfim9b8"}

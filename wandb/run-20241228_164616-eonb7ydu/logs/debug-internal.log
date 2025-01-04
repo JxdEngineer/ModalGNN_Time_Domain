@@ -1,0 +1,17 @@
+{"time":"2024-12-28T16:46:16.8250045+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-28T16:46:16.8255076+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241228_164616-eonb7ydu\\logs\\debug-core.log"}
+{"time":"2024-12-28T16:46:16.9319462+08:00","level":"INFO","msg":"created new stream","id":"eonb7ydu"}
+{"time":"2024-12-28T16:46:16.9319462+08:00","level":"INFO","msg":"stream: started","id":"eonb7ydu"}
+{"time":"2024-12-28T16:46:16.9319462+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:46:16.9319462+08:00","level":"INFO","msg":"sender: started","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:46:16.9319462+08:00","level":"INFO","msg":"handler: started","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:46:17.2575624+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-28T16:50:15.6097146+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-28T16:50:15.6097146+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-28T16:50:16.6244323+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.2866395,"progress":"872B/872B"},{"desc":"uploading output.log","runtime_seconds":0.2866395,"progress":"31.1KB/31.1KB"}],"total_operations":2}}
+{"time":"2024-12-28T16:50:17.587097+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-28T16:50:19.3421881+08:00","level":"INFO","msg":"stream: closing","id":"eonb7ydu"}
+{"time":"2024-12-28T16:50:19.3421881+08:00","level":"INFO","msg":"handler: closed","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:50:19.3421881+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:50:19.3421881+08:00","level":"INFO","msg":"sender: closed","stream_id":"eonb7ydu"}
+{"time":"2024-12-28T16:50:19.3421881+08:00","level":"INFO","msg":"stream: closed","id":"eonb7ydu"}

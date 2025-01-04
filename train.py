@@ -13,6 +13,8 @@ import time
 from torch.optim.lr_scheduler import StepLR
 import wandb
 
+use_WB = 1 # if 1 use Weights&Biases, if 0 not use
+
 # fix Seed - DGL cannot reproduce results by fixing the seed
 seed = 123
 torch.manual_seed(seed)
@@ -50,53 +52,58 @@ def train(config_path):
     model.to(device)
     print('Create model: done')
     
-    train_no = np.array(range(0, 32))
-    # train_no = np.concatenate((np.array(range(0, 40)), np.array(range(50, 100))))
-    valid_no = np.array(range(32, 40))
-    dataloader_train = get_dataset(data_path=config['data']['path'], 
-                            bs=config['data']['bs'], 
+    train_no = np.array(range(0, 5))
+    valid_no = np.array(range(495, 500))
+    
+    dataset_train = get_dataset(data_path=config['data']['path'], 
                             graph_no=train_no, 
                             time_0=config['shared']['time_0'], 
                             time_L=config['shared']['time_L'], 
                             mode_N=config['shared']['mode_N'],
-                            device=device)
+                            device = device)
+    dataloader_train = dgl.dataloading.GraphDataLoader(dataset_train, 
+                                  batch_size=config['data']['bs'],
+                                  drop_last=False, shuffle=True)
     print('Create training dataset: done')
-    dataloader_valid = get_dataset(data_path=config['data']['path'], 
-                            bs=config['data']['bs'], 
+    dataset_valid = get_dataset(data_path=config['data']['path'], 
                             graph_no=valid_no, 
                             time_0=config['shared']['time_0'], 
                             time_L=config['shared']['time_L'], 
                             mode_N=config['shared']['mode_N'],
-                            device=device)
+                            device = device)
+    dataloader_valid = dgl.dataloading.GraphDataLoader(dataset_valid, 
+                                  batch_size=config['data']['bs'],
+                                  drop_last=False, shuffle=False)
     print('Create validation dataset: done')
     
     # start a new wandb run to track the training process #####################
-    # wandb.init(
-    #     # set the wandb project where this run will be logged
-    #     project="ModalGNN_TimeDomain",
-    #     # track hyperparameters and run metadata
-    #     config={
-    #         "mode_N": config['shared']['mode_N'],
-    #         "time_L": config['shared']['time_L'],
-    #         "time_0": config['shared']['time_0'],
-    #         "model_dim": config['model']['dim'],
-    #         "fft_n": config['model']['fft_n'],
-    #         "dropout_rate": config['model']['dropout_rate'],
-    #         "hid_layer": config['model']['hid_layer'],
-    #         "batch_size": config['data']['bs'],     
-    #         "learning_rate": config['train']['learning_rate'],
-    #         "step_size": config['train']['step_size'],
-    #         "gamma": config['train']['gamma'],
-    #         "train_N": len(train_no),
-    #         "model_name": config['model']['name']
-    #     }
-    # )
-    
-    # update W&B config
-    # api = wandb.Api()
-    # run = api.run("jxd-engineer/ModalTemporalGNN/3jvvrp2h")
-    # run.config["N_mode"] = 7
-    # run.update()
+    if use_WB == 1:
+        wandb.init(
+            # set the wandb project where this run will be logged
+            project="ModalGNN_TimeDomain",
+            # track hyperparameters and run metadata
+            config={
+                "mode_N": config['shared']['mode_N'],
+                "time_L": config['shared']['time_L'],
+                "time_0": config['shared']['time_0'],
+                "model_dim": config['model']['dim'],
+                "fft_n": config['model']['fft_n'],
+                "dropout_rate": config['model']['dropout_rate'],
+                "hid_layer": config['model']['hid_layer'],
+                "batch_size": config['data']['bs'],     
+                "learning_rate": config['train']['learning_rate'],
+                "step_size": config['train']['step_size'],
+                "gamma": config['train']['gamma'],
+                "train_N": len(train_no),
+                "model_name": config['model']['name']
+            }
+        )
+        
+        # update W&B config
+        # api = wandb.Api()
+        # run = api.run("jxd-engineer/ModalTemporalGNN/3jvvrp2h")
+        # run.config["N_mode"] = 7
+        # run.update()
     
     # Setup optimizer and loss function
     optimizer = torch.optim.Adam(model.parameters(), lr=config['train']['learning_rate'])
@@ -113,75 +120,83 @@ def train(config_path):
         f.write("epoch, time, loss1, loss2, loss3, loss4, total_loss\n")  # Header for the log file
  
     # Training loop
-    model.train()
     start_time = time.time()
     for epoch in range(config['train']['epochs']):
         
-        if epoch < 2500:
+        if epoch < 10000:
             # coefficients of different loss terms
             c1 = 1
-            c2 = 10
-            c3 = 10
+            c2 = 20
+            c3 = 20
             c4 = 0
             # c5 = 0
         else:
             c1 = 1
-            c2 = 10
-            c3 = 10
+            c2 = 20
+            c3 = 20
             c4 = 0
-        
-        # model validation ##################################
-        epoch_loss_valid = 0
-        for graph_valid in dataloader_valid:
-            q_pred_valid, phi_pred_valid = model(graph_valid[0])  # model inference
-            # phi_pred_valid = graph_valid[0].ndata['phi_Y']  # use true phi for training 
-            loss1_valid, loss2_valid, loss3_valid, loss4_valid = \
-                loss_terms(q_pred_valid, phi_pred_valid, graph_valid, 
-                           fft_n=config['model']['fft_n'])
-            loss_valid = loss1_valid*c1 + loss2_valid*c2 + loss3_valid*c3 + loss4_valid*c4
-            epoch_loss_valid += loss_valid
-        epoch_loss_valid /= len(dataloader_valid)
-        train_time = (time.time() - start_time)
-        # Write losses to the log file
-        with open(log_file_path_valid, 'a') as f:
-            f.write(f"{epoch}, {train_time:.3f}, {loss1_valid:.10f}, {loss2_valid:.10f}, {loss3_valid:.10f}, {loss4_valid:.10f}, {loss_valid:.10f}\n")
-        
+              
         # model training ##################################
+        model.train()
         epoch_loss_train = 0
         for graph_train in dataloader_train:
+            # graph_train = graph_train[0].to(device)
             q_pred_train, phi_pred_train = model(graph_train[0])  # model inference
             # phi_pred_train = graph_train[0].ndata['phi_Y']  # use true phi for training 
             loss1_train, loss2_train, loss3_train, loss4_train = \
-                loss_terms(q_pred_train, phi_pred_train, graph_train,
+                loss_terms(q_pred_train, phi_pred_train, graph_train[0],
                            fft_n=config['model']['fft_n'])
-      
             loss_train = loss1_train*c1 + loss2_train*c2 + loss3_train*c3 + loss4_train*c4
+            
+            # backpropogation ##################################
+            optimizer.zero_grad()
+            loss_train.backward()
+            optimizer.step()
+            scheduler.step()
+            
             epoch_loss_train += loss_train
         epoch_loss_train /= len(dataloader_train)
         train_time = (time.time() - start_time)
         # Write losses to the log file
         with open(log_file_path_train, 'a') as f:
             f.write(f"{epoch}, {train_time:.3f}, {loss1_train:.10f}, {loss2_train:.10f}, {loss3_train:.10f}, {loss4_train:.10f}, {loss_train:.10f}\n")
-        # backpropogation ##################################
-        optimizer.zero_grad()
-        epoch_loss_train.backward()
-        optimizer.step()
-        scheduler.step()
+        
+        # model validation ##################################
+        model.eval()
+        epoch_loss_valid = 0
+        with torch.no_grad(): # Turn off gradient tracking
+            for graph_valid in dataloader_valid:
+                # graph_valid = graph_valid[0].to(device)
+                q_pred_valid, phi_pred_valid = model(graph_valid[0])  # model inference
+                # phi_pred_valid = graph_valid[0].ndata['phi_Y']  # use true phi for training 
+                loss1_valid, loss2_valid, loss3_valid, loss4_valid = \
+                    loss_terms(q_pred_valid, phi_pred_valid, graph_valid[0], 
+                               fft_n=config['model']['fft_n'])
+                loss_valid = loss1_valid*c1 + loss2_valid*c2 + loss3_valid*c3 + loss4_valid*c4
+                epoch_loss_valid += loss_valid
+        epoch_loss_valid /= len(dataloader_valid)
+        train_time = (time.time() - start_time)
+        # Write losses to the log file
+        with open(log_file_path_valid, 'a') as f:
+            f.write(f"{epoch}, {train_time:.3f}, {loss1_valid:.10f}, {loss2_valid:.10f}, {loss3_valid:.10f}, {loss4_valid:.10f}, {loss_valid:.10f}\n")
 
-        if (epoch + 1) % 20 == 0:
+        if (epoch + 1) % 10 == 0 or epoch == 0:
             print('epoch: {}, loss_train: {:.10f}, loss_valid: {:.10f}' 
                   .format(epoch, epoch_loss_train, epoch_loss_valid))  
             
         # log metrics to wandb #########################  
-    #     wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
-    #                 "loss_valid": loss1_valid + loss2_valid + loss3_valid,
-    #                 "loss1_valid": loss1_valid,
-    #                 "loss2_valid": loss2_valid,
-    #                 "loss3_valid": loss3_valid,
-    #                 "loss1_train": loss1_train,
-    #                 "loss2_train": loss2_train,
-    #                 "loss3_train": loss3_train})    
-    # wandb.finish()
+        if use_WB == 1:
+            wandb.log({"loss_train": loss1_train + loss2_train + loss3_train,
+                        "loss_valid": loss1_valid + loss2_valid + loss3_valid,
+                        "loss1_valid": loss1_valid,
+                        "loss2_valid": loss2_valid,
+                        "loss3_valid": loss3_valid,
+                        "loss1_train": loss1_train,
+                        "loss2_train": loss2_train,
+                        "loss3_train": loss3_train})    
+            
+    if use_WB == 1:
+        wandb.finish()
     
     train_time = (time.time() - start_time)
     print("Train the model: done, %s seconds" % train_time)

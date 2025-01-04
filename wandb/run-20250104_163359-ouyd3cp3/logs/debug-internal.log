@@ -1,0 +1,18 @@
+{"time":"2025-01-04T16:33:59.3287999+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T16:33:59.3287999+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20250104_163359-ouyd3cp3\\logs\\debug-core.log"}
+{"time":"2025-01-04T16:33:59.4392422+08:00","level":"INFO","msg":"created new stream","id":"ouyd3cp3"}
+{"time":"2025-01-04T16:33:59.4392422+08:00","level":"INFO","msg":"stream: started","id":"ouyd3cp3"}
+{"time":"2025-01-04T16:33:59.439745+08:00","level":"INFO","msg":"sender: started","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:33:59.4398651+08:00","level":"INFO","msg":"handler: started","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:33:59.4398651+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:33:59.8082664+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T16:35:00.6409224+08:00","level":"INFO","msg":"api: retrying HTTP error","status":502,"url":"https://api.wandb.ai/files/jxd-engineer/ModalGNN_TimeDomain/ouyd3cp3/file_stream","body":"\n<html><head>\n<meta http-equiv=\"content-type\" content=\"text/html;charset=utf-8\">\n<title>502 Server Error</title>\n</head>\n<body text=#000000 bgcolor=#ffffff>\n<h1>Error: Server Error</h1>\n<h2>The server encountered a temporary error and could not complete your request.<p>Please try again in 30 seconds.</h2>\n<h2></h2>\n</body></html>\n"}
+{"time":"2025-01-04T16:35:55.8807341+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T16:35:55.8812463+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T16:35:56.8939707+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.2398986,"progress":"875B/875B"},{"desc":"uploading output.log","runtime_seconds":0.2398986,"progress":"680B/680B"}],"total_operations":2}}
+{"time":"2025-01-04T16:35:57.1226139+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T16:35:58.4501541+08:00","level":"INFO","msg":"stream: closing","id":"ouyd3cp3"}
+{"time":"2025-01-04T16:35:58.4501541+08:00","level":"INFO","msg":"handler: closed","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:35:58.4501541+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:35:58.4501541+08:00","level":"INFO","msg":"sender: closed","stream_id":"ouyd3cp3"}
+{"time":"2025-01-04T16:35:58.4501541+08:00","level":"INFO","msg":"stream: closed","id":"ouyd3cp3"}

@@ -7,7 +7,7 @@ from scipy.signal import welch
 # loss function using fft of modal responses
 def loss_terms(q_pred, phi_pred, graph, fft_n):
     loss_func = nn.MSELoss()
-    graph_unbatched = dgl.unbatch(graph[0])
+    graph_unbatched = dgl.unbatch(graph)
     phi_index1 = 0
     phi_index2 = 0
     
@@ -15,6 +15,10 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
         phi_index1 = phi_index2
         phi_index2 = phi_index1 + dgl.DGLGraph.number_of_nodes(graph_unbatched[i])
         phi_pred_unbatched = phi_pred[phi_index1:phi_index2]
+        
+        # normalize phi - does not work, produce errors
+        # phi_max = torch.max(torch.abs(phi_pred_unbatched), dim=0)[0] # find maximal absolute values
+        # phi_pred_unbatched /= phi_max
         
         q_pred_unbatched = q_pred[i, :, :]
         # use FFT of q to calculate loss 3 ######################
@@ -58,9 +62,9 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
             # q_fft_mm = torch.block_diag(q_fft_mm, torch.mm(q_pred_unbatched_fft, q_pred_unbatched_fft.T))
             
     batched_eye = torch.zeros_like(q_corr).fill_diagonal_(1)
-    acc_true = graph[0].ndata['acc_Y']
+    acc_true = graph.ndata['acc_Y']
     # incomplete measurements
-    node_mask = graph[0].ndata['mask'] 
+    node_mask = graph.ndata['mask'] 
     acc_true = acc_true[node_mask, :]
     acc_pred = acc_pred[node_mask, :]
     # calculate loss
@@ -75,9 +79,22 @@ def loss_terms(q_pred, phi_pred, graph, fft_n):
     # loss2 = torch.norm(q_mm-batched_eye)
     # loss3 = torch.norm(q_fft_mm-batched_eye)
     
-    loss4 = loss_func(phi_pred, graph[0].ndata['phi_Y'])
+    # use true phi in the loss function
+    # loss4 = loss_func(phi_pred, graph.ndata['phi_Y'])
+    # loss4 = loss_func(torch.abs(phi_pred), torch.abs(graph.ndata['phi_Y'])) # abs of phi
+    # cos = nn.CosineSimilarity(dim=0, eps=1e-6)
+    # similarity = abs(cos(phi_pred, graph.ndata['phi_Y']))
+    # loss4 = loss_func(similarity, torch.ones_like(similarity))
+    loss4 = loss3
     
+    # use true FFT phase angle in the loss function
     # acc_pred_phase = torch.fft.rfft(acc_pred, n=fft_n).angle()
     # acc_true_phase = torch.fft.rfft(acc_true, n=fft_n).angle()
     # loss4 = loss_func(acc_pred_phase, acc_true_phase)
+    
+    # adjust the magnitude of output phi
+    # max_abs_output = torch.max(torch.abs(phi_pred), dim=0)[0]
+    # loss4 = loss_func(max_abs_output, torch.ones_like(max_abs_output))
+    # loss4 = torch.max(torch.abs(max_abs_output-torch.ones_like(max_abs_output)))
+    
     return loss1, loss2, loss3, loss4

@@ -1,0 +1,17 @@
+{"time":"2025-01-04T16:27:05.0197418+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T16:27:05.0197418+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20250104_162705-o64g59hp\\logs\\debug-core.log"}
+{"time":"2025-01-04T16:27:05.1312245+08:00","level":"INFO","msg":"created new stream","id":"o64g59hp"}
+{"time":"2025-01-04T16:27:05.1312245+08:00","level":"INFO","msg":"stream: started","id":"o64g59hp"}
+{"time":"2025-01-04T16:27:05.1312245+08:00","level":"INFO","msg":"handler: started","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:27:05.1312245+08:00","level":"INFO","msg":"sender: started","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:27:05.1312245+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:27:05.537184+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T16:32:27.5100389+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T16:32:27.5108921+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T16:32:28.5137832+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.263596,"progress":"1.6KB/1.6KB"},{"desc":"uploading config.yaml","runtime_seconds":0.263596,"progress":"878B/878B"}],"total_operations":2}}
+{"time":"2025-01-04T16:32:29.5033254+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T16:32:30.832304+08:00","level":"INFO","msg":"stream: closing","id":"o64g59hp"}
+{"time":"2025-01-04T16:32:30.832304+08:00","level":"INFO","msg":"handler: closed","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:32:30.832304+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:32:30.832304+08:00","level":"INFO","msg":"sender: closed","stream_id":"o64g59hp"}
+{"time":"2025-01-04T16:32:30.832304+08:00","level":"INFO","msg":"stream: closed","id":"o64g59hp"}

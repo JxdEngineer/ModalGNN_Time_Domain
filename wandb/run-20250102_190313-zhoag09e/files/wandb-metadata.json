@@ -1,0 +1,38 @@
+{
+  "os": "Windows-10-10.0.22631-SP0",
+  "python": "CPython 3.10.9",
+  "startedAt": "2025-01-02T11:03:13.820313Z",
+  "program": "c:\\users\\xudjian\\desktop\\modalgnn_time_domain\\train.py",
+  "codePath": "train.py",
+  "email": "jxd.engineer@gmail.com",
+  "root": "C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain",
+  "host": "SEC-D10886",
+  "executable": "D:\\anaconda3\\python.exe",
+  "codePathLocal": "train.py",
+  "cpu_count": 24,
+  "cpu_count_logical": 32,
+  "gpu": "NVIDIA GeForce RTX 3060",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "509722226688",
+      "used": "211839557632"
+    }
+  },
+  "memory": {
+    "total": "34070368256"
+  },
+  "cpu": {
+    "count": 24,
+    "countLogical": 32
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 3060",
+      "memoryTotal": "12884901888",
+      "cudaCores": 3584,
+      "architecture": "Ampere"
+    }
+  ],
+  "cudaVersion": "12.2"
+}

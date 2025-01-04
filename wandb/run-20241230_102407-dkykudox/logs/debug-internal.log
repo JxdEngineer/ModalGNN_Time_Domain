@@ -1,0 +1,17 @@
+{"time":"2024-12-30T10:24:07.2511657+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-30T10:24:07.2511657+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241230_102407-dkykudox\\logs\\debug-core.log"}
+{"time":"2024-12-30T10:24:07.3574328+08:00","level":"INFO","msg":"created new stream","id":"dkykudox"}
+{"time":"2024-12-30T10:24:07.3574328+08:00","level":"INFO","msg":"stream: started","id":"dkykudox"}
+{"time":"2024-12-30T10:24:07.3574328+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:24:07.3574328+08:00","level":"INFO","msg":"sender: started","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:24:07.3574328+08:00","level":"INFO","msg":"handler: started","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:24:08.7650141+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-30T10:25:53.9902722+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-30T10:25:53.9907758+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-30T10:25:55.0041925+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 1731-1999, summary, console lines 173-199","runtime_seconds":0.5827483},{"desc":"uploading wandb-summary.json","runtime_seconds":0.2034855,"progress":"381B/381B"}],"total_operations":2}}
+{"time":"2024-12-30T10:25:56.2746992+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-30T10:25:57.5548738+08:00","level":"INFO","msg":"stream: closing","id":"dkykudox"}
+{"time":"2024-12-30T10:25:57.5548738+08:00","level":"INFO","msg":"handler: closed","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:25:57.5548738+08:00","level":"INFO","msg":"sender: closed","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:25:57.5548738+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"dkykudox"}
+{"time":"2024-12-30T10:25:57.5548738+08:00","level":"INFO","msg":"stream: closed","id":"dkykudox"}

@@ -1,0 +1,11 @@
+epoch: 0, loss_train: 0.3192126751, loss_valid: 1.5114934444
+epoch: 9, loss_train: 0.0457867160, loss_valid: 0.0561444275
+epoch: 19, loss_train: 0.0396191962, loss_valid: 0.0282742418
+epoch: 29, loss_train: 0.0392350256, loss_valid: 0.0269166511
+epoch: 39, loss_train: 0.0377837121, loss_valid: 0.0265602246
+epoch: 49, loss_train: 0.0402120724, loss_valid: 0.0264193974
+epoch: 59, loss_train: 0.0390026271, loss_valid: 0.0263419412
+epoch: 69, loss_train: 0.0395811833, loss_valid: 0.0263253618
+epoch: 79, loss_train: 0.0379892401, loss_valid: 0.0263126511
+epoch: 89, loss_train: 0.0380674601, loss_valid: 0.0263071656
+epoch: 99, loss_train: 0.0379008576, loss_valid: 0.0263045989

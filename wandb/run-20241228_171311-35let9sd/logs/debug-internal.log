@@ -1,0 +1,18 @@
+{"time":"2024-12-28T17:13:11.7410077+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-28T17:13:11.7410077+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241228_171311-35let9sd\\logs\\debug-core.log"}
+{"time":"2024-12-28T17:13:11.846963+08:00","level":"INFO","msg":"created new stream","id":"35let9sd"}
+{"time":"2024-12-28T17:13:11.846963+08:00","level":"INFO","msg":"stream: started","id":"35let9sd"}
+{"time":"2024-12-28T17:13:11.846963+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:13:11.846963+08:00","level":"INFO","msg":"handler: started","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:13:11.846963+08:00","level":"INFO","msg":"sender: started","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:13:17.1937006+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-28T17:29:09.8762339+08:00","level":"INFO","msg":"api: retrying error","error":"Post \"https://api.wandb.ai/files/jxd-engineer/ModalGNN_TimeDomain/35let9sd/file_stream\": dial tcp 35.186.228.49:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond."}
+{"time":"2024-12-28T17:29:11.1897824+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-28T17:29:11.1902953+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-28T17:29:12.2000741+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history steps 4803-4879, console lines 480-487","runtime_seconds":24.3819278,"error_status":"retrying: Post \"https://api.wandb.ai/files/jxd-engineer/ModalGNN_TimeDomain/35let9sd/file_stream\": dial tcp 35.186.228.49:443: connectex: A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond."},{"desc":"uploading config.yaml","runtime_seconds":0.2430929,"progress":"874B/874B"},{"desc":"uploading output.log","runtime_seconds":0.2430929,"progress":"31.1KB/31.1KB"}],"total_operations":3}}
+{"time":"2024-12-28T17:29:13.2157719+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-28T17:29:18.6696304+08:00","level":"INFO","msg":"stream: closing","id":"35let9sd"}
+{"time":"2024-12-28T17:29:18.6703004+08:00","level":"INFO","msg":"handler: closed","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:29:18.6703004+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:29:18.6703004+08:00","level":"INFO","msg":"sender: closed","stream_id":"35let9sd"}
+{"time":"2024-12-28T17:29:18.6703004+08:00","level":"INFO","msg":"stream: closed","id":"35let9sd"}

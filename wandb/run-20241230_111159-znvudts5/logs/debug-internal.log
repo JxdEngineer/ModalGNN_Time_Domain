@@ -1,0 +1,17 @@
+{"time":"2024-12-30T11:11:59.3294974+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-30T11:11:59.3294974+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241230_111159-znvudts5\\logs\\debug-core.log"}
+{"time":"2024-12-30T11:11:59.4363078+08:00","level":"INFO","msg":"created new stream","id":"znvudts5"}
+{"time":"2024-12-30T11:11:59.4363078+08:00","level":"INFO","msg":"stream: started","id":"znvudts5"}
+{"time":"2024-12-30T11:11:59.4363078+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:11:59.4363078+08:00","level":"INFO","msg":"sender: started","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:11:59.4363078+08:00","level":"INFO","msg":"handler: started","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:12:00.7355972+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-30T11:13:45.5991396+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-30T11:13:45.5996844+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-30T11:13:46.6673381+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading wandb-summary.json","runtime_seconds":0.5542163,"progress":"380B/380B"},{"desc":"uploading history steps 1718-1999, summary, console lines 171-199","runtime_seconds":0.2995102},{"desc":"uploading config.yaml","runtime_seconds":0.2884944,"progress":"873B/873B"},{"desc":"uploading output.log","runtime_seconds":0.2884944,"progress":"12.4KB/12.4KB"}],"total_operations":4}}
+{"time":"2024-12-30T11:13:47.6431898+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-30T11:13:48.9467638+08:00","level":"INFO","msg":"stream: closing","id":"znvudts5"}
+{"time":"2024-12-30T11:13:48.9467638+08:00","level":"INFO","msg":"handler: closed","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:13:48.9467638+08:00","level":"INFO","msg":"sender: closed","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:13:48.9467638+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"znvudts5"}
+{"time":"2024-12-30T11:13:48.9467638+08:00","level":"INFO","msg":"stream: closed","id":"znvudts5"}

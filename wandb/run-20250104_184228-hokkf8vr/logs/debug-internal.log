@@ -1,0 +1,17 @@
+{"time":"2025-01-04T18:42:28.3431535+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T18:42:28.3431535+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20250104_184228-hokkf8vr\\logs\\debug-core.log"}
+{"time":"2025-01-04T18:42:28.4521066+08:00","level":"INFO","msg":"created new stream","id":"hokkf8vr"}
+{"time":"2025-01-04T18:42:28.4521066+08:00","level":"INFO","msg":"stream: started","id":"hokkf8vr"}
+{"time":"2025-01-04T18:42:28.4521066+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T18:42:28.4526477+08:00","level":"INFO","msg":"sender: started","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T18:42:28.4526477+08:00","level":"INFO","msg":"handler: started","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T18:42:28.7936859+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T19:18:38.719762+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T19:18:38.7198944+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T19:18:39.7323195+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.2691738,"progress":"875B/875B"},{"desc":"uploading output.log","runtime_seconds":0.2691738,"progress":"316.4KB/316.4KB"}],"total_operations":2}}
+{"time":"2025-01-04T19:18:41.4673628+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T19:18:42.8965597+08:00","level":"INFO","msg":"stream: closing","id":"hokkf8vr"}
+{"time":"2025-01-04T19:18:42.8965597+08:00","level":"INFO","msg":"handler: closed","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T19:18:42.8965597+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T19:18:42.8965597+08:00","level":"INFO","msg":"sender: closed","stream_id":"hokkf8vr"}
+{"time":"2025-01-04T19:18:42.8965597+08:00","level":"INFO","msg":"stream: closed","id":"hokkf8vr"}

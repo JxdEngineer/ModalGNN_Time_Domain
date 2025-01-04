@@ -1,0 +1,17 @@
+{"time":"2024-12-30T01:06:01.2244676+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2024-12-30T01:06:01.2244676+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20241230_010601-nq3xhvv7\\logs\\debug-core.log"}
+{"time":"2024-12-30T01:06:01.3301623+08:00","level":"INFO","msg":"created new stream","id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:01.330266+08:00","level":"INFO","msg":"stream: started","id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:01.330266+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:01.330266+08:00","level":"INFO","msg":"sender: started","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:01.330266+08:00","level":"INFO","msg":"handler: started","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:01.7535226+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-30T01:06:21.2866714+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-30T01:06:21.2866714+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-30T01:06:22.2960153+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.4851627,"progress":"873B/873B"},{"desc":"uploading output.log","runtime_seconds":0.4851627}],"total_operations":2}}
+{"time":"2024-12-30T01:06:23.0447056+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-30T01:06:24.3514102+08:00","level":"INFO","msg":"stream: closing","id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:24.3514102+08:00","level":"INFO","msg":"handler: closed","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:24.3514102+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:24.3514102+08:00","level":"INFO","msg":"sender: closed","stream_id":"nq3xhvv7"}
+{"time":"2024-12-30T01:06:24.3514102+08:00","level":"INFO","msg":"stream: closed","id":"nq3xhvv7"}

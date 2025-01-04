@@ -1,0 +1,29 @@
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_setup.py:_flush():68] Current SDK version is 0.19.1
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_setup.py:_flush():68] Configure stats pid to 55740
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_setup.py:_flush():68] Loading settings from C:\Users\xudjian\.config\wandb\settings
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_setup.py:_flush():68] Loading settings from C:\Users\xudjian\Desktop\ModalGNN_Time_Domain\wandb\settings
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_setup.py:_flush():68] Loading settings from environment variables
+2025-01-02 19:03:13,807 INFO    MainThread:55740 [wandb_init.py:_log_setup():528] Logging user logs to C:\Users\xudjian\Desktop\ModalGNN_Time_Domain\wandb\run-20250102_190313-zhoag09e\logs\debug.log
+2025-01-02 19:03:13,816 INFO    MainThread:55740 [wandb_init.py:_log_setup():529] Logging internal logs to C:\Users\xudjian\Desktop\ModalGNN_Time_Domain\wandb\run-20250102_190313-zhoag09e\logs\debug-internal.log
+2025-01-02 19:03:13,816 INFO    MainThread:55740 [wandb_init.py:init():644] calling init triggers
+2025-01-02 19:03:13,816 INFO    MainThread:55740 [wandb_init.py:init():650] wandb.init called with sweep_config: {}
+config: {'mode_N': 7, 'time_L': 2000, 'time_0': 1000, 'model_dim': 64, 'fft_n': 1024, 'dropout_rate': 0.1, 'hid_layer': 0, 'batch_size': 32, 'learning_rate': 0.0002, 'step_size': 100, 'gamma': 1, 'train_N': 64, 'model_name': 'SAGE_1st'}
+2025-01-02 19:03:13,816 INFO    MainThread:55740 [wandb_init.py:init():680] starting backend
+2025-01-02 19:03:13,816 INFO    MainThread:55740 [wandb_init.py:init():684] sending inform_init request
+2025-01-02 19:03:13,818 INFO    MainThread:55740 [backend.py:_multiprocessing_setup():104] multiprocessing start_methods=spawn, using: spawn
+2025-01-02 19:03:13,819 INFO    MainThread:55740 [wandb_init.py:init():697] backend started and connected
+2025-01-02 19:03:13,820 INFO    MainThread:55740 [wandb_init.py:init():790] updated telemetry
+2025-01-02 19:03:13,821 INFO    MainThread:55740 [wandb_init.py:init():822] communicating run to backend with 90.0 second timeout
+2025-01-02 19:03:14,878 INFO    MainThread:55740 [wandb_init.py:init():874] starting run threads in backend
+2025-01-02 19:03:15,075 INFO    MainThread:55740 [wandb_run.py:_console_start():2374] atexit reg
+2025-01-02 19:03:15,075 INFO    MainThread:55740 [wandb_run.py:_redirect():2224] redirect: wrap_raw
+2025-01-02 19:03:15,076 INFO    MainThread:55740 [wandb_run.py:_redirect():2289] Wrapping output streams.
+2025-01-02 19:03:15,076 INFO    MainThread:55740 [wandb_run.py:_redirect():2314] Redirects installed.
+2025-01-02 19:03:15,076 INFO    MainThread:55740 [wandb_init.py:init():916] run started, returning control to user process
+2025-01-02 21:43:31,989 INFO    MainThread:55740 [wandb_run.py:_finish():2100] finishing run jxd-engineer/ModalGNN_TimeDomain/zhoag09e
+2025-01-02 21:43:31,989 INFO    MainThread:55740 [wandb_run.py:_atexit_cleanup():2339] got exitcode: 0
+2025-01-02 21:43:31,989 INFO    MainThread:55740 [wandb_run.py:_restore():2321] restore
+2025-01-02 21:43:31,990 INFO    MainThread:55740 [wandb_run.py:_restore():2327] restore done
+2025-01-02 21:43:36,168 INFO    MainThread:55740 [wandb_run.py:_footer_history_summary_info():3892] rendering history
+2025-01-02 21:43:36,168 INFO    MainThread:55740 [wandb_run.py:_footer_history_summary_info():3924] rendering summary
+2025-01-02 21:43:36,173 INFO    MainThread:55740 [wandb_run.py:_footer_sync_info():3853] logging synced files

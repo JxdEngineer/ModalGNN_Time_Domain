@@ -1,0 +1,53 @@
+_wandb:
+    value:
+        cli_version: 0.19.1
+        m: []
+        python_version: 3.10.9
+        t:
+            "1":
+                - 1
+                - 55
+                - 76
+            "2":
+                - 1
+                - 55
+                - 76
+            "3":
+                - 2
+                - 16
+                - 23
+                - 55
+            "4": 3.10.9
+            "5": 0.19.1
+            "8":
+                - 3
+                - 5
+                - 13
+            "12": 0.19.1
+            "13": windows-amd64
+batch_size:
+    value: 256
+dropout_rate:
+    value: 0.1
+fft_n:
+    value: 1024
+gamma:
+    value: 0.9
+hid_layer:
+    value: 0
+learning_rate:
+    value: 0.005
+mode_N:
+    value: 7
+model_dim:
+    value: 64
+model_name:
+    value: SAGE_1st
+step_size:
+    value: 5
+time_0:
+    value: 1000
+time_L:
+    value: 1000
+train_N:
+    value: 400

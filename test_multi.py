@@ -2,6 +2,7 @@
 import torch
 import numpy as np
 import time
+import dgl
 import matplotlib.pyplot as plt
 
 from scipy.signal import welch
@@ -33,15 +34,17 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-# test_no = np.array(range(32)) # sample from the training set
-test_no = np.array(range(32, 50)) # sample from the testing set
-dataloader_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
-                        bs=1, 
+test_no = np.array(range(5)) # sample from the training set
+# test_no = np.array(range(400, 500)) # sample from the testing set
+dataset_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
                         graph_no=test_no, 
                         time_0=config['shared']['time_0'], 
                         time_L=config['shared']['time_L'], 
                         mode_N=config['shared']['mode_N'],
-                        device='cpu')
+                        device = 'cpu')
+dataloader_test = dgl.dataloading.GraphDataLoader(dataset_test, 
+                              batch_size=1,
+                              drop_last=False, shuffle=False)
 print('Create dataset: done')
 # %% plot test results
 N_test = len(test_no)
@@ -63,7 +66,8 @@ for graph_test in dataloader_test:
     element_test = torch.stack((graph_test[0].edges()[0], graph_test[0].edges()[1]), dim=1)
     element_test = element_test[:element_test.size(0)//2, :]  # only select the first half because the graph is undirectional
     
-    q_pred_test, phi_pred_test = model(graph_test[0])
+    with torch.no_grad(): # Turn off gradient tracking
+        q_pred_test, phi_pred_test = model(graph_test[0])
     q_pred_test = torch.squeeze(q_pred_test, 0)
     
     # calulate PSD using Scipy ########
@@ -117,8 +121,8 @@ plt.scatter(freq_test_true[:, 4], freq_test_id[:, 4], color='#FFC61E', s=marker_
 plt.plot([0,20], [0,20], linestyle='--', color='black', label='\u00B1 0%')
 plt.plot([0,20], [0,20*0.9], linestyle='--', color='blue', label='\u00B1 10%')
 plt.plot([0,20*0.9], [0,20], linestyle='--', color='blue')
-plt.xlim([-0.05,20])
-plt.ylim([-0.05,20])
+plt.xlim([-0.5,20.5])
+plt.ylim([-0.5,20.5])
 plt.legend(prop={'family': 'Times New Roman', 'size': 16}, handlelength=1, borderpad=0.1, labelspacing=0.1)
 plt.xticks(fontsize=15, fontname='Times New Roman')
 plt.yticks(fontsize=15, fontname='Times New Roman')
@@ -138,7 +142,7 @@ plt.scatter(np.zeros([N_test, 1])+4, MAC_test_id[:, 3], color='#AF58BA', label='
 plt.scatter(np.zeros([N_test, 1])+5, MAC_test_id[:, 4], color='#FFC61E', label='mode 5', s=marker_size, alpha=1)
 plt.boxplot(MAC_test_id, 0, '')
 plt.xticks([1, 2, 3, 4, 5], ['Mode1', 'Mode2', 'Mode3', 'Mode4', 'Mode5'])
-plt.ylim([0, 1.05])
+plt.ylim([-0.05, 1.05])
 plt.xticks(fontsize=15, fontname='Times New Roman')
 plt.yticks(fontsize=15, fontname='Times New Roman')
 plt.ylabel('MAC', fontname='Times New Roman', fontsize=17)

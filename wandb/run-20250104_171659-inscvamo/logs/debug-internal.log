@@ -1,0 +1,17 @@
+{"time":"2025-01-04T17:16:59.302409+08:00","level":"INFO","msg":"using version","core version":"0.19.1"}
+{"time":"2025-01-04T17:16:59.302409+08:00","level":"INFO","msg":"created symlink","path":"C:\\Users\\xudjian\\Desktop\\ModalGNN_Time_Domain\\wandb\\run-20250104_171659-inscvamo\\logs\\debug-core.log"}
+{"time":"2025-01-04T17:16:59.4132757+08:00","level":"INFO","msg":"created new stream","id":"inscvamo"}
+{"time":"2025-01-04T17:16:59.4138176+08:00","level":"INFO","msg":"stream: started","id":"inscvamo"}
+{"time":"2025-01-04T17:16:59.4138176+08:00","level":"INFO","msg":"writer: Do: started","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:16:59.4138176+08:00","level":"INFO","msg":"handler: started","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:16:59.4138176+08:00","level":"INFO","msg":"sender: started","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:16:59.715705+08:00","level":"INFO","msg":"Starting system monitor"}
+{"time":"2025-01-04T17:18:42.4181066+08:00","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2025-01-04T17:18:42.4187067+08:00","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2025-01-04T17:18:43.4303649+08:00","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.2814399,"progress":"875B/875B"},{"desc":"uploading output.log","runtime_seconds":0.2814399,"progress":"61B/61B"}],"total_operations":2}}
+{"time":"2025-01-04T17:18:44.3947803+08:00","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2025-01-04T17:18:45.731605+08:00","level":"INFO","msg":"stream: closing","id":"inscvamo"}
+{"time":"2025-01-04T17:18:45.731605+08:00","level":"INFO","msg":"handler: closed","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:18:45.731605+08:00","level":"INFO","msg":"sender: closed","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:18:45.731605+08:00","level":"INFO","msg":"writer: Close: closed","stream_id":"inscvamo"}
+{"time":"2025-01-04T17:18:45.731605+08:00","level":"INFO","msg":"stream: closed","id":"inscvamo"}

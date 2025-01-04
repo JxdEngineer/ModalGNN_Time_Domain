@@ -2,6 +2,7 @@
 import torch
 import numpy as np
 import math
+import dgl
 import matplotlib.pyplot as plt
 
 from scipy.signal import welch
@@ -11,6 +12,8 @@ from data.dataset_loader import get_dataset
 from utils.match_mode import MAC
 from utils.match_mode import match_mode
 import yaml
+
+from torchinfo import summary
 
 import os
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
@@ -30,18 +33,23 @@ model = create_model(model_name=config['model']['name'],
 PATH = config['model']['name'] + ".pth"
 model.load_state_dict(torch.load(PATH))
 
+# output the information of the model
+# print(summary(model))
+
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array([24-1]) # sample from the training set, 24 is for APWSHM paper
-# test_no = np.array([47-1]) # sample from the testing set, 47 is for APWSHM paper
-dataloader_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
-                        bs=config['data']['bs'], 
+# test_no = np.array([4-1]) # sample from the training set, 24 is for APWSHM paper
+test_no = np.array([401-1]) # sample from the testing set, 47 is for APWSHM paper
+dataset_test = get_dataset(data_path="C:/Users/xudjian/Desktop/truss_500_lowpass.mat", 
                         graph_no=test_no, 
                         time_0=config['shared']['time_0'], 
                         time_L=config['shared']['time_L'], 
                         mode_N=config['shared']['mode_N'],
-                        device='cpu')
+                        device = 'cpu')
+dataloader_test = dgl.dataloading.GraphDataLoader(dataset_test, 
+                              batch_size=1,
+                              drop_last=False, shuffle=False)
 print('Create dataset: done')
 # %% plot test results
 # plt.close('all')
@@ -214,7 +222,8 @@ for graph_test in dataloader_test:
     element_test = torch.stack((graph_test[0].edges()[0], graph_test[0].edges()[1]), dim=1)
     element_test = element_test[:element_test.size(0)//2, :]  # only select the first half because the graph is undirectional
     
-    q_pred_test, phi_pred_test = model(graph_test[0])
+    with torch.no_grad(): # Turn off gradient tracking
+        q_pred_test, phi_pred_test = model(graph_test[0])
     q_pred_test = torch.squeeze(q_pred_test, 0)
     
     # sort out q from low-order modes to high-order modes, based on the dominant frequency, then also sort out phi
@@ -276,7 +285,9 @@ for graph_test in dataloader_test:
         ax[mode_no, 0].plot(q_pred_test[:, mode_no].to('cpu').detach().numpy())
         ax[mode_no, 0].set_ylabel('q')
         ax[mode_no, 0].set_xlabel('Time Step')
-        ax[mode_no, 0].grid()    
+        ax[mode_no, 0].grid()
+        title_text = "max_abs={:.4f}".format(torch.max(abs(q_pred_test[:, mode_no])))
+        ax[mode_no, 0].set_title(title_text, fontsize=12)
         
         # [f_n, zeta] = ModalId(frequencies, psd)
         psd = q_pred_test_fft[mode_no, :].to('cpu').detach().numpy()
@@ -289,7 +300,7 @@ for graph_test in dataloader_test:
             ax[mode_no, 1].plot([freq_test[i], freq_test[i]], [0, max(psd)], color='#FF1F5B')    
         
         phi_pred = phi_pred_test[:, mode_no].to('cpu').detach().numpy().squeeze()
-        phi_pred = phi_pred / max(abs(phi_pred)) * 2
+        phi_pred = phi_pred / max(abs(phi_pred)) * 2  # max normalization
         node_pred = np.zeros([len(node_test), 2])
         node_pred[:, 0] = node_test[:, 0]
         node_pred[:, 1] = node_test[:, 1] + phi_pred
@@ -314,6 +325,8 @@ for graph_test in dataloader_test:
         ax[mode_no, 3-1].grid()
         ax[mode_no, 3-1].set_ylabel('phi_id')
         ax[mode_no, 3-1].set_xlabel('X [m]')
+        title_text = "max_abs={:.4f}".format(torch.max(abs(phi_pred_test[:, mode_no])))
+        ax[mode_no, 3-1].set_title(title_text, fontsize=12)
         
         for ele in element_test:
             node1 = node_test[ele[0]]
@@ -346,3 +359,8 @@ print("freq_pred_match")
 print(freq_pred_match)
 print("MAC_pred_match")
 print(MAC_pred_match)
+
+print('q_max')
+print(torch.max(abs(q_pred_test), dim=0)[0])
+print('phi_max')
+print(torch.max(abs(phi_pred_test), dim=0)[0])

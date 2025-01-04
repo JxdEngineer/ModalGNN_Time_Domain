@@ -178,7 +178,7 @@ class Dataset(DGLDataset):
             # define node mask
             node_mask = torch.ones(len(self.node[graph_id]), dtype=torch.bool)
             graph_sub.ndata['mask'] = node_mask
-            graph_sub = graph_sub.to(self.device)
+            graph_sub = graph_sub
             # define graph features ##########################################
             graph_freq = self.freq[graph_id][:self.mode_N].squeeze()
             graph_zeta = self.zeta[graph_id][:self.mode_N].squeeze()
@@ -187,14 +187,14 @@ class Dataset(DGLDataset):
             self.zetas.append(graph_zeta)
             print('graph_id =', graph_id)
         # Convert the graph features to tensor type
-        self.freqs = torch.tensor(self.freqs, dtype = torch.float).to(self.device)
-        self.zetas = torch.tensor(self.zetas, dtype = torch.float).to(self.device)
+        self.freqs = torch.tensor(np.array(self.freqs), dtype = torch.float)
+        self.zetas = torch.tensor(np.array(self.zetas), dtype = torch.float)
     def __getitem__(self, i):
-        return self.graphs[i], self.freqs[i], self.zetas[i]
+        return self.graphs[i].to(self.device), self.freqs[i].to(self.device), self.zetas[i].to(self.device)
     def __len__(self):
         return len(self.graphs)
 
-def get_dataset(data_path, bs, graph_no, time_0, time_L, mode_N, device):
+def get_dataset(data_path, graph_no, time_0, time_L, mode_N, device):
     # Load data
     mat_contents = sio.loadmat(data_path)
     acc_input = mat_contents['acceleration_time_out'][:, 0]
@@ -208,6 +208,4 @@ def get_dataset(data_path, bs, graph_no, time_0, time_L, mode_N, device):
                  acc_input, phi, node, # node features
                  element, # edge features
                  freq, zeta)  # graph features
-    dataloader_dataset = dgl.dataloading.GraphDataLoader(dataset, batch_size=bs,
-                                  drop_last=False, shuffle=False)
-    return dataloader_dataset
+    return dataset

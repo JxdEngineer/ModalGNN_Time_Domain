@@ -1,0 +1,13 @@
+# PyTorch with CUDA 12.1
+pip install torch==2.1.2 --index-url https://download.pytorch.org/whl/cu121
+
+# DGL (Deep Graph Library) with CUDA 12.1
+pip install  dgl -f https://data.dgl.ai/wheels/torch-2.1/cu121/repo.html
+
+# Add other dependencies here
+pip install numpy==1.26.4 # included in dgl
+python -m pip install scipy  # included in dgl
+python -m pip install -U matplotlib
+pip install pandas  # included in dgl
+pip install TIME-python
+pip install wandb

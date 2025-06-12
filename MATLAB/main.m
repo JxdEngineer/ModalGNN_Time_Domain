@@ -3,17 +3,14 @@ clc
 clear
 close all
 
-load("C:\Users\xudjian\Desktop\truss_200_lowpass.mat")
+load truss_dataset.mat
 fs = 200;
 
 segment_index = 1001:3000;
 
 t = 1/fs*[0:length(acceleration_time_out{1}(1,segment_index))-1];
 
-test_no = 1:100;
-
-% test_no = 1:3; % demonstrate identified phi of truss 3 in the paper
-% test_no = 1:8; % demonstrate identified phi of truss 3 in the paper
+test_no = 1:20;
 
 testN = length(test_no);
 

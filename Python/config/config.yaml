@@ -15,7 +15,7 @@ model:
     hid_layer: 1
     
 data:
-    path: "C:/Users/xudjian/Desktop/truss_200_lowpass.mat" # local, 200 truss dataset
+    path: "./truss_dataset.mat"
     bs: 64
     
 train:

@@ -34,7 +34,7 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-test_no = np.array(range(100)) 
+test_no = np.array(range(20)) 
 dataset_test = get_dataset(data_path=config['data']['path'], 
                         graph_no=test_no, 
                         time_0_list=config['shared']['time_0'], 

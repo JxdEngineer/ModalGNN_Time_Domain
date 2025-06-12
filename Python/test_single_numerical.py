@@ -38,9 +38,8 @@ model.load_state_dict(torch.load(PATH))
 model.eval()
 
 # designate sample no. for testing ######################################
-# test_no = np.array([3-1]) # decomposition example 1 in the paper
+test_no = np.array([3-1]) # decomposition example 1 in the paper
 # test_no = np.array([8-1]) # mode shape example in the paper
-test_no = np.array([93-1])  # decomposition example 2 in the paper
 dataset_test = get_dataset(data_path=config['data']['path'], 
                         graph_no=test_no, 
                         time_0_list=config['shared']['time_0'], 

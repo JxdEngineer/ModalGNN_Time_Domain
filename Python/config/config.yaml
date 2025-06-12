@@ -1,16 +1,8 @@
 shared:
-    # simulation
-    # mode_N: 7 
-    # time_L: 2000
-    # time_0_list: [1000]
-    # time_0: [1000]
-    # fs: 200 # truss_500/200
-    
-    # laboratory
-    mode_N: 5
+    mode_N: 7 
     time_L: 2000
-    time_0_list: [50]
-    time_0: [50]
+    time_0_list: [1000]
+    time_0: [1000]
     fs: 200
 
 model:
@@ -23,20 +15,11 @@ model:
     hid_layer: 1
     
 data:
-    # path: "C:/Users/xudjian/Desktop/truss_200_lowpass.mat" # local, 200 truss dataset
-    path: "C:/Users/xudjian/Desktop/ModalGNN_Time_Domain/Python/dataset2.mat" 
-    
+    path: "C:/Users/xudjian/Desktop/truss_200_lowpass.mat" # local, 200 truss dataset
     bs: 64
     
 train:
-    # simulation
-    # learning_rate: 0.0003
-    # epochs: 10000
-    # step_size: 1000
-    # gamma: 0.8
-    
-    # laboratory
-    learning_rate: 0.0001
-    epochs: 20000
+    learning_rate: 0.0003
+    epochs: 5000
     step_size: 1000
-    gamma: 0.8
+    gamma: 0.9

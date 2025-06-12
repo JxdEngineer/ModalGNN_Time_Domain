@@ -50,8 +50,8 @@ def train(config_path):
     print('Create model: done')
     
     # Create datasets  ########################################
-    train_no = np.array(range(80))
-    valid_no = np.array(range(80, 90))
+    train_no = np.array(range(10))
+    valid_no = np.array(range(10, 15))
     
     start_time = time.time()
     dataset_train = get_dataset(data_path=config['data']['path'], 
@@ -104,7 +104,6 @@ def train(config_path):
         for graph_train in dataloader_train:
             graph_train = graph_train[0].to(device)
             q_pred_train, phi_pred_train = model(graph_train)  # model inference
-            # phi_pred_train = graph_train[0].ndata['phi_Y']  # use true phi for training 
             loss1_train, loss2_train, loss3_train = \
                 loss_terms(q_pred_train, phi_pred_train, graph_train,
                             fft_n=config['model']['fft_n'])
@@ -131,7 +130,6 @@ def train(config_path):
             for graph_valid in dataloader_valid:
                 graph_valid = graph_valid[0].to(device)
                 q_pred_valid, phi_pred_valid = model(graph_valid)  # model inference
-                # phi_pred_valid = graph_valid[0].ndata['phi_Y']  # use true phi for training 
                 loss1_valid, loss2_valid, loss3_valid = \
                     loss_terms(q_pred_valid, phi_pred_valid, graph_valid, 
                                 fft_n=config['model']['fft_n'])
